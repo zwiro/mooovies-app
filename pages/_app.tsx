@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={roboto.className}>
       <Layout>
-        <main>
+        <main className="px-2 py-4">
           <Component {...pageProps} />
         </main>
       </Layout>

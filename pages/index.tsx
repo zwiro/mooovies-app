@@ -1,5 +1,6 @@
 import { FetchedData } from "@/types"
 import Head from "next/head"
+import Image from "next/image"
 
 interface HomeProps {
   movies: FetchedData
@@ -15,7 +16,26 @@ export default function Home({ movies }: HomeProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>Hello world</div>
+      <p>Trending Movies</p>
+      <div className="grid grid-flow-col gap-2 overflow-x-scroll">
+        {movies.results.map((movie) => (
+          <div
+            key={movie.id}
+            className="relative w-max rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90 p-2"
+          >
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+              alt="Movie poster"
+              width={300}
+              height={300}
+              className="relative -z-10 rounded-xl"
+            />
+            <p className="absolute bottom-2 left-1/2 -translate-x-1/2 tracking-wider">
+              {movie.title}
+            </p>
+          </div>
+        ))}
+      </div>
     </>
   )
 }
