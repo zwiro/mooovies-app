@@ -7,6 +7,7 @@ import MobileMenu from "./MobileMenu"
 import { AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Searchbar from "./Searchbar"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 function Navbar() {
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false)
@@ -15,23 +16,34 @@ function Navbar() {
     setIsMobileMenuVisible((prevVisible) => !prevVisible)
   }
 
+  const isDesktopMenu = useMediaQuery("(min-width: 768px)")
+
   return (
     <nav className="flex items-center gap-2 border-b border-zinc-800 px-4 py-2">
       <Link href="/">
         <Image src={logo} alt="Logo" />
       </Link>
-      <Searchbar />
-      <Bars3Icon
-        onClick={toggleMobileMenu}
-        className="h-12 w-12 cursor-pointer transition-all hover:animate-wiggle"
-      />
-      <AnimatePresence>
-        {isMobileMenuVisible && (
-          <MobileMenu toggleMobileMenu={toggleMobileMenu}>
-            <NavLinks />
-          </MobileMenu>
-        )}
-      </AnimatePresence>
+      {isDesktopMenu ? (
+        <>
+          <NavLinks />
+          <Searchbar />
+        </>
+      ) : (
+        <>
+          <Searchbar />
+          <Bars3Icon
+            onClick={toggleMobileMenu}
+            className="h-12 w-12 cursor-pointer transition-all hover:animate-wiggle"
+          />
+          <AnimatePresence>
+            {isMobileMenuVisible && (
+              <MobileMenu toggleMobileMenu={toggleMobileMenu}>
+                <NavLinks />
+              </MobileMenu>
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </nav>
   )
 }
