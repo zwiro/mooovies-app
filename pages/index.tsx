@@ -1,6 +1,12 @@
+import { FetchedData } from "@/types"
 import Head from "next/head"
 
-export default function Home() {
+interface HomeProps {
+  movies: FetchedData
+}
+
+export default function Home({ movies }: HomeProps) {
+  console.log(movies)
   return (
     <>
       <Head>
@@ -12,4 +18,17 @@ export default function Home() {
       <div>Hello world</div>
     </>
   )
+}
+
+export async function getStaticProps() {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+  )
+  const movies = await res.json()
+
+  return {
+    props: {
+      movies,
+    },
+  }
 }
