@@ -1,11 +1,8 @@
-import Card from "@/components/Card"
-import CardSlider from "@/components/CardSlider"
-import PopularMovies from "@/components/PopularMovies"
-import PopularPeople from "@/components/PopularPeople"
-import PopularShows from "@/components/PopularShows"
+import PopularMovies from "@/components/Home/PopularMovies"
+import PopularPeople from "@/components/Home/PopularPeople"
+import PopularShows from "@/components/Home/PopularShows"
 import { FetchedDataMovies, FetchedDataPeople, FetchedDataShows } from "@/types"
 import Head from "next/head"
-import Image from "next/image"
 
 interface HomeProps {
   movies: FetchedDataMovies
@@ -14,7 +11,6 @@ interface HomeProps {
 }
 
 export default function Home({ movies, shows, people }: HomeProps) {
-  console.log(shows, people)
   return (
     <>
       <Head>

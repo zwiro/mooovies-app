@@ -1,6 +1,7 @@
 import { FetchedDataMovies } from "@/types"
-import CardSlider from "./CardSlider"
-import Card from "./Card"
+import CardSlider from "../CardSlider"
+import Card from "../Card"
+import SectionHeader from "./SectionHeader"
 
 interface PopularMoviesProps {
   movies: FetchedDataMovies
@@ -9,7 +10,7 @@ interface PopularMoviesProps {
 function PopularMovies({ movies }: PopularMoviesProps) {
   return (
     <>
-      <h2>Popular Movies</h2>
+      <SectionHeader title="Popular Movies" />
       <CardSlider>
         {movies.results.map((movie) => (
           <Card

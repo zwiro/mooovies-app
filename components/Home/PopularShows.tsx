@@ -1,6 +1,7 @@
 import { FetchedDataShows } from "@/types"
-import CardSlider from "./CardSlider"
-import Card from "./Card"
+import CardSlider from "../CardSlider"
+import Card from "../Card"
+import SectionHeader from "./SectionHeader"
 
 interface PopularShowsProps {
   shows: FetchedDataShows
@@ -9,7 +10,7 @@ interface PopularShowsProps {
 function PopularShows({ shows }: PopularShowsProps) {
   return (
     <>
-      <h2>Popular Shows</h2>
+      <SectionHeader title="Popular Shows" />
       <CardSlider>
         {shows.results.map((show) => (
           <Card key={show.id} image={show.backdrop_path} title={show.name} />
