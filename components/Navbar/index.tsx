@@ -5,6 +5,7 @@ import { useState } from "react"
 import NavLinks from "./NavLinks"
 import MobileMenu from "./MobileMenu"
 import { AnimatePresence } from "framer-motion"
+import Link from "next/link"
 
 function Navbar() {
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false)
@@ -15,7 +16,9 @@ function Navbar() {
 
   return (
     <nav className="flex items-center justify-between border-b border-red-800 px-4 py-2">
-      <Image src={logo} alt="Logo" />
+      <Link href="/">
+        <Image src={logo} alt="Logo" />
+      </Link>
       <Bars3Icon
         onClick={toggleMobileMenu}
         className="h-12 w-12 cursor-pointer transition-all hover:animate-wiggle"
