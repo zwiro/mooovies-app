@@ -17,8 +17,10 @@ function NavLinks() {
         <Link key={`navLink-${i}`} href={navLink.href}>
           <li
             className={`${
-              router.pathname === navLink.href && "pl-2 font-bold text-red-700"
-            }`}
+              router.pathname === navLink.href
+                ? "translate-x-2 font-bold text-red-700"
+                : "transition-transform hover:translate-x-2"
+            } hover:underline`}
           >
             {navLink.name}
           </li>

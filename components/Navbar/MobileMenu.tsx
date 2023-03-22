@@ -16,7 +16,7 @@ function MobileMenu({ toggleMobileMenu, children }: MobileMenuProps) {
   return (
     <motion.div
       {...mobileMenuAnimation}
-      className="absolute top-0 right-0 h-screen border-l border-red-800 py-4 px-2 backdrop-blur"
+      className="absolute top-0 right-0 h-screen border-l border-zinc-800 py-4 px-2 backdrop-blur"
     >
       <XMarkIcon
         onClick={toggleMobileMenu}

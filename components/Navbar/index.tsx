@@ -6,6 +6,7 @@ import NavLinks from "./NavLinks"
 import MobileMenu from "./MobileMenu"
 import { AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import Searchbar from "./Searchbar"
 
 function Navbar() {
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false)
@@ -15,10 +16,11 @@ function Navbar() {
   }
 
   return (
-    <nav className="flex items-center justify-between border-b border-red-800 px-4 py-2">
+    <nav className="flex items-center gap-2 border-b border-zinc-800 px-4 py-2">
       <Link href="/">
         <Image src={logo} alt="Logo" />
       </Link>
+      <Searchbar />
       <Bars3Icon
         onClick={toggleMobileMenu}
         className="h-12 w-12 cursor-pointer transition-all hover:animate-wiggle"
