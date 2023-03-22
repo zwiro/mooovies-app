@@ -1,13 +1,20 @@
-import { FetchedData } from "@/types"
+import Card from "@/components/Card"
+import CardSlider from "@/components/CardSlider"
+import PopularMovies from "@/components/PopularMovies"
+import PopularPeople from "@/components/PopularPeople"
+import PopularShows from "@/components/PopularShows"
+import { FetchedDataMovies, FetchedDataPeople, FetchedDataShows } from "@/types"
 import Head from "next/head"
 import Image from "next/image"
 
 interface HomeProps {
-  movies: FetchedData
+  movies: FetchedDataMovies
+  shows: FetchedDataShows
+  people: FetchedDataPeople
 }
 
-export default function Home({ movies }: HomeProps) {
-  console.log(movies)
+export default function Home({ movies, shows, people }: HomeProps) {
+  console.log(shows, people)
   return (
     <>
       <Head>
@@ -16,39 +23,38 @@ export default function Home({ movies }: HomeProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <p>Trending Movies</p>
-      <div className="grid grid-flow-col gap-2 overflow-x-scroll">
-        {movies.results.map((movie) => (
-          <div
-            key={movie.id}
-            className="relative w-max rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90 p-2"
-          >
-            <Image
-              src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-              alt="Movie poster"
-              width={300}
-              height={300}
-              className="relative -z-10 rounded-xl"
-            />
-            <p className="absolute bottom-2 left-1/2 -translate-x-1/2 tracking-wider">
-              {movie.title}
-            </p>
-          </div>
-        ))}
-      </div>
+      <h1>Mooovies</h1>
+      <PopularMovies movies={movies} />
+      <PopularShows shows={shows} />
+      <PopularPeople people={people} />
     </>
   )
 }
 
 export async function getStaticProps() {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
-  )
-  const movies = await res.json()
+  const [moviesRes, showsRes, peopleRes] = await Promise.all([
+    fetch(
+      `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+    ),
+    fetch(
+      `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+    ),
+    fetch(
+      ` https://api.themoviedb.org/3/person/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+    ),
+  ])
+
+  const [movies, shows, people] = await Promise.all([
+    moviesRes.json(),
+    showsRes.json(),
+    peopleRes.json(),
+  ])
 
   return {
     props: {
       movies,
+      shows,
+      people,
     },
   }
 }
