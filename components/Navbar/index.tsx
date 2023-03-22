@@ -1,21 +1,11 @@
 import Image from "next/image"
 import logo from "@/public/logo.svg"
-import { Bars3Icon } from "@heroicons/react/24/solid"
-import { useState } from "react"
-import NavLinks from "./NavLinks"
-import MobileMenu from "./MobileMenu"
-import { AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import Searchbar from "./Searchbar"
 import useMediaQuery from "@/hooks/useMediaQuery"
+import DesktopNav from "./DesktopNav"
+import MobileNav from "./MobileNav"
 
 function Navbar() {
-  const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false)
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuVisible((prevVisible) => !prevVisible)
-  }
-
   const isDesktopMenu = useMediaQuery("(min-width: 768px)")
 
   return (
@@ -23,27 +13,7 @@ function Navbar() {
       <Link href="/">
         <Image src={logo} alt="Logo" />
       </Link>
-      {isDesktopMenu ? (
-        <>
-          <NavLinks />
-          <Searchbar />
-        </>
-      ) : (
-        <>
-          <Searchbar />
-          <Bars3Icon
-            onClick={toggleMobileMenu}
-            className="h-12 w-12 cursor-pointer transition-all hover:animate-wiggle"
-          />
-          <AnimatePresence>
-            {isMobileMenuVisible && (
-              <MobileMenu toggleMobileMenu={toggleMobileMenu}>
-                <NavLinks />
-              </MobileMenu>
-            )}
-          </AnimatePresence>
-        </>
-      )}
+      {isDesktopMenu ? <DesktopNav /> : <MobileNav />}
     </nav>
   )
 }
