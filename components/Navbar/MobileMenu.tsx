@@ -20,7 +20,7 @@ function MobileMenu({ toggleMobileMenu, children }: MobileMenuProps) {
     >
       <XMarkIcon
         onClick={toggleMobileMenu}
-        className="ml-auto h-8 w-8 cursor-pointer transition-all hover:rotate-90 hover:text-red-500"
+        className="ml-auto h-8 w-8 cursor-pointer transition-all hover:rotate-90 hover:text-red-700"
       />
       {children}
     </motion.div>
