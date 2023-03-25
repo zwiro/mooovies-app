@@ -1,5 +1,6 @@
-import { Movie } from "@/types"
 import Image from "next/image"
+import posterPlaceholder from "@/public/poster_placeholder.png"
+import { useState } from "react"
 
 interface CardProps {
   image: string
@@ -7,11 +8,15 @@ interface CardProps {
 }
 
 function Card({ image, title }: CardProps) {
+  const [displayedPoster, setDisplayedPoster] = useState(
+    `https://image.tmdb.org/t/p/w500${image}`
+  )
   return (
     <div className="group relative h-48 w-64 cursor-pointer snap-center rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90">
       <Image
-        src={`https://image.tmdb.org/t/p/w500${image}`}
-        alt="Poster"
+        src={displayedPoster}
+        onError={() => setDisplayedPoster(posterPlaceholder)}
+        alt={`${title} poster`}
         fill
         className="relative -z-10 rounded-xl object-cover transition-all group-hover:brightness-125"
       />
