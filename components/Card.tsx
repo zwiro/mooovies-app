@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image, { StaticImageData } from "next/image"
 import posterPlaceholder from "@/public/poster_placeholder.png"
 import { useState } from "react"
 
@@ -8,9 +8,9 @@ interface CardProps {
 }
 
 function Card({ image, title }: CardProps) {
-  const [displayedPoster, setDisplayedPoster] = useState(
-    `https://image.tmdb.org/t/p/w500${image}`
-  )
+  const [displayedPoster, setDisplayedPoster] = useState<
+    string | StaticImageData
+  >(`https://image.tmdb.org/t/p/w500${image}`)
   return (
     <div className="group relative h-48 w-64 cursor-pointer snap-center rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90">
       <Image
