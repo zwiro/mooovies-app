@@ -6,16 +6,16 @@ interface CardProps {
   id: number
   image: string
   title: string
-  openCard: (cardId: number) => void
+  toggleCard: (cardId: number) => void
 }
 
-function Card({ id, image, title, openCard }: CardProps) {
+function Card({ id, image, title, toggleCard }: CardProps) {
   const [displayedPoster, setDisplayedPoster] = useState<
     string | StaticImageData
   >(`https://image.tmdb.org/t/p/w500${image}`)
   return (
     <div
-      onClick={() => openCard(id)}
+      onClick={() => toggleCard(id)}
       className="group relative h-48 w-64 cursor-pointer snap-center rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90"
     >
       <Image

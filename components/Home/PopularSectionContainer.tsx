@@ -6,24 +6,39 @@ import PopularSection from "./PopularSection"
 function PopularSectionContainer({ movies, shows, people }: DataTypes) {
   const [openedCardId, setOpenedCardId] = useState<number | null>(null)
 
-  const openCard = (cardId: number) => {
+  const toggleCard = (cardId: number | null) => {
     setOpenedCardId(cardId)
   }
+
+  const concatenatedData = [
+    ...movies.results,
+    ...shows.results,
+    ...people.results,
+  ]
 
   return (
     <>
       <PopularSection
         data={movies}
         title="Popular Movies"
-        openCard={openCard}
+        toggleCard={toggleCard}
       />
-      <PopularSection data={shows} title="Popular Shows" openCard={openCard} />
+      <PopularSection
+        data={shows}
+        title="Popular Shows"
+        toggleCard={toggleCard}
+      />
       <PopularSection
         data={people}
         title="Popular People"
-        openCard={openCard}
+        toggleCard={toggleCard}
       />
-      {openedCardId && <CardDetails openedCardId={openedCardId} />}
+      {openedCardId && (
+        <CardDetails
+          card={concatenatedData.find((data) => data.id === openedCardId)!}
+          toggleCard={toggleCard}
+        />
+      )}
     </>
   )
 }

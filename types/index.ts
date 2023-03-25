@@ -58,3 +58,11 @@ export interface DataTypes {
   shows: FetchedDataShows
   people: FetchedDataPeople
 }
+
+export function isPeople(data: Person | Movie | Show): data is Person {
+  return "profile_path" in data
+}
+
+export function isMovies(data: Person | Movie | Show): data is Movie {
+  return "title" in data
+}
