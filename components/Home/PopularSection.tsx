@@ -13,9 +13,10 @@ import SectionHeader from "./SectionHeader"
 interface PopularSectionProps {
   data: FetchedDataPeople | FetchedDataMovies | FetchedDataShows
   title: string
+  openCard: (id: number) => void
 }
 
-function PopularPeople({ data, title }: PopularSectionProps) {
+function PopularSection({ data, title, openCard }: PopularSectionProps) {
   return (
     <>
       <SectionHeader title={title} />
@@ -23,8 +24,10 @@ function PopularPeople({ data, title }: PopularSectionProps) {
         {data.results.map((data) => (
           <Card
             key={data.id}
+            id={data.id}
             image={isPeople(data) ? data.profile_path : data.backdrop_path}
             title={isMovies(data) ? data.title : data.name}
+            openCard={openCard}
           />
         ))}
       </CardSlider>
@@ -32,7 +35,7 @@ function PopularPeople({ data, title }: PopularSectionProps) {
   )
 }
 
-export default PopularPeople
+export default PopularSection
 
 function isPeople(data: Person | Movie | Show): data is Person {
   return "profile_path" in data

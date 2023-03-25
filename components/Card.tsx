@@ -1,19 +1,23 @@
 import Image, { StaticImageData } from "next/image"
 import posterPlaceholder from "@/public/poster_placeholder.png"
 import { useState } from "react"
-import CardDetails from "./CardDetails"
 
 interface CardProps {
+  id: number
   image: string
   title: string
+  openCard: (cardId: number) => void
 }
 
-function Card({ image, title }: CardProps) {
+function Card({ id, image, title, openCard }: CardProps) {
   const [displayedPoster, setDisplayedPoster] = useState<
     string | StaticImageData
   >(`https://image.tmdb.org/t/p/w500${image}`)
   return (
-    <div className="group relative h-48 w-64 cursor-pointer snap-center rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90">
+    <div
+      onClick={() => openCard(id)}
+      className="group relative h-48 w-64 cursor-pointer snap-center rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90"
+    >
       <Image
         src={displayedPoster}
         onError={() => setDisplayedPoster(posterPlaceholder)}

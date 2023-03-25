@@ -52,3 +52,9 @@ export interface Person {
   popularity: number
   profile_path: string
 }
+
+export interface DataTypes {
+  movies: FetchedDataMovies
+  shows: FetchedDataShows
+  people: FetchedDataPeople
+}
