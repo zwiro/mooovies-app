@@ -52,5 +52,6 @@ export async function getStaticProps() {
       shows,
       people,
     },
+    revalidate: 21600,
   }
 }
