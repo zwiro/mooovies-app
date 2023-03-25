@@ -1,6 +1,4 @@
-import PopularMovies from "@/components/Home/PopularMovies"
-import PopularPeople from "@/components/Home/PopularPeople"
-import PopularShows from "@/components/Home/PopularShows"
+import PopularSection from "@/components/Home/PopularSection"
 import { FetchedDataMovies, FetchedDataPeople, FetchedDataShows } from "@/types"
 import axios from "axios"
 import Head from "next/head"
@@ -21,9 +19,9 @@ export default function Home({ movies, shows, people }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Mooovies</h1>
-      <PopularMovies movies={movies} />
-      <PopularShows shows={shows} />
-      <PopularPeople people={people} />
+      <PopularSection data={movies} title="Popular Movies" />
+      <PopularSection data={shows} title="Popular Shows" />
+      <PopularSection data={people} title="Popular People" />
     </>
   )
 }

@@ -1,6 +1,7 @@
 import Image, { StaticImageData } from "next/image"
 import posterPlaceholder from "@/public/poster_placeholder.png"
 import { useState } from "react"
+import CardDetails from "./CardDetails"
 
 interface CardProps {
   image: string
