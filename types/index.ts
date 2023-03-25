@@ -47,7 +47,7 @@ export interface Person {
   gender: number
   id: number
   known_for: Movie[] | Show[]
-  known_for_deparment: string
+  known_for_department: string
   name: string
   popularity: number
   profile_path: string

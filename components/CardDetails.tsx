@@ -4,7 +4,7 @@ import Image, { StaticImageData } from "next/image"
 import { useState } from "react"
 import posterPlaceholder from "@/public/poster_placeholder.png"
 import { getGenreFromId } from "@/utils/getGenreFromId"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 
 interface CardDetailsProps {
   card: Movie | Show | Person
@@ -54,7 +54,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           height={512}
           className="rounded-xl"
         />
-        {!isPeople(card) && (
+        {!isPeople(card) ? (
           <>
             <p>{card.overview}</p>
             <span className="text-sm">Released {release}</span>
@@ -62,6 +62,22 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
               {card.genre_ids.map((id) => (
                 <div key={id} className="rounded bg-red-700 px-1">
                   {getGenreFromId(id)}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col text-sm">
+              <div className="flex">
+                <span>Known for:</span>
+                <span className="ml-auto rounded bg-red-700 px-1 text-base">
+                  {card.known_for_department}
+                </span>
+              </div>
+              {card.known_for.map((item) => (
+                <div key={item.id} className="font-bold">
+                  {isMovies(item) ? item.title : item.name}
                 </div>
               ))}
             </div>
