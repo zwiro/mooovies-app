@@ -1,4 +1,5 @@
 import { DataTypes } from "@/types"
+import { AnimatePresence } from "framer-motion"
 import { useState } from "react"
 import CardDetails from "../CardDetails"
 import PopularSection from "./PopularSection"
@@ -33,12 +34,14 @@ function PopularSectionContainer({ movies, shows, people }: DataTypes) {
         title="Popular People"
         toggleCard={toggleCard}
       />
-      {openedCardId && (
-        <CardDetails
-          card={concatenatedData.find((data) => data.id === openedCardId)!}
-          toggleCard={toggleCard}
-        />
-      )}
+      <AnimatePresence>
+        {openedCardId && (
+          <CardDetails
+            card={concatenatedData.find((data) => data.id === openedCardId)!}
+            toggleCard={toggleCard}
+          />
+        )}
+      </AnimatePresence>
     </>
   )
 }

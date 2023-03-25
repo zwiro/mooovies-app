@@ -4,6 +4,7 @@ import Image, { StaticImageData } from "next/image"
 import { useState } from "react"
 import posterPlaceholder from "@/public/poster_placeholder.png"
 import { getGenreFromId } from "@/utils/getGenreFromId"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface CardDetailsProps {
   card: Movie | Show | Person
@@ -23,8 +24,18 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
 
   console.log(card)
 
+  const cardDetailsAnimation = {
+    initial: { scale: 0 },
+    animate: { scale: 1 },
+    exit: { scale: 0 },
+    transition: { type: "tween" },
+  }
+
   return (
-    <div className="absolute inset-0 z-20 grid place-items-center bg-black/20 p-4 backdrop-blur">
+    <motion.div
+      {...cardDetailsAnimation}
+      className="absolute inset-0 z-20 grid place-items-center bg-black/20 p-4 backdrop-blur"
+    >
       <div className="m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4">
         <div className="flex items-center">
           <h3 className="text-xl font-bold tracking-widest text-red-700">
@@ -57,7 +68,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           </>
         )}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
