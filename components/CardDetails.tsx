@@ -22,21 +22,32 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
     string | StaticImageData
   >(`https://image.tmdb.org/t/p/w500${image}`)
 
-  console.log(card)
+  const container = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+  }
 
-  const cardDetailsAnimation = {
-    initial: { scale: 0 },
-    animate: { scale: 1 },
-    exit: { scale: 0 },
-    transition: { type: "tween" },
+  const item = {
+    hidden: { scale: 0 },
+    show: { scale: 1 },
+  }
+
+  const animation = {
+    initial: "hidden",
+    animate: "show",
+    exit: "hidden",
   }
 
   return (
     <motion.div
-      {...cardDetailsAnimation}
+      variants={container}
+      {...animation}
       className="absolute inset-0 z-20 grid place-items-center bg-black/20 p-4 backdrop-blur"
     >
-      <div className="m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4">
+      <motion.div
+        variants={item}
+        className="m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4"
+      >
         <div className="flex items-center">
           <h3 className="text-xl font-bold tracking-widest text-red-700">
             {title}
@@ -83,7 +94,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
             </div>
           </>
         )}
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
