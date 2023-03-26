@@ -6,35 +6,35 @@ import { GetServerSidePropsContext } from "next"
 import { AnimatePresence } from "framer-motion"
 import CardDetails from "@/components/CardDetails"
 import { useRouter } from "next/router"
+import useCard from "@/hooks/useCard"
 
 interface SearchPageProps {
   searchResult: { results: (Movie | Show | Person)[] }
 }
 
 function SearchPage({ searchResult }: SearchPageProps) {
-  const [openedCardId, setOpenedCardId] = useState<number | null>(null) // TODO: CHANGE TO CUSTOM HOOK
-
-  const toggleCard = (cardId: number | null) => {
-    setOpenedCardId(cardId)
-  }
-
+  const { openedCardId, toggleCard } = useCard()
   const router = useRouter()
 
   return (
-    <div className="grid place-items-center gap-4">
-      <p>
+    <>
+      <p className="pb-4 text-center">
         Search results for{" "}
-        <span className="font-bold">{router.query.slug}</span>:
+        <span className="font-bold text-red-700">{router.query.slug}</span>:
       </p>
-      {searchResult.results.map((result) => (
-        <Card
-          key={result.id}
-          id={result.id}
-          image={isPeople(result) ? result.profile_path : result.backdrop_path}
-          title={isMovies(result) ? result.title : result.name}
-          toggleCard={toggleCard}
-        />
-      ))}
+      <div className="grid grid-cols-fluid place-items-center gap-4">
+        {searchResult.results.map((result) => (
+          <Card
+            key={result.id}
+            id={result.id}
+            image={
+              isPeople(result) ? result.profile_path : result.backdrop_path
+            }
+            title={isMovies(result) ? result.title : result.name}
+            toggleCard={toggleCard}
+          />
+        ))}
+      </div>
       <AnimatePresence>
         {openedCardId && (
           <CardDetails
@@ -47,7 +47,7 @@ function SearchPage({ searchResult }: SearchPageProps) {
           />
         )}
       </AnimatePresence>
-    </div>
+    </>
   )
 }
 

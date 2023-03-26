@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        fluid: "repeat(auto-fit, minmax(16rem, 1fr))",
+      },
       keyframes: {
         wiggle: {
           "0%": { transform: "translateX(0%)" },
