@@ -3,7 +3,7 @@ import tmdb from "@/public/tmdb.svg"
 
 function Footer() {
   return (
-    <footer className="sticky bottom-0 flex w-full items-center justify-between border-t border-zinc-800 px-4 py-2">
+    <footer className="absolute bottom-0 flex w-full items-center justify-between border-t border-zinc-800 px-4 py-2">
       <p>
         moovies &copy; 2023 by{" "}
         <a
