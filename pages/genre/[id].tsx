@@ -24,11 +24,11 @@ function GenrePage({ movies, shows }: GenrePageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center">
-        <span className="font-bold text-red-700">
+      <p className="pb-4 text-center tracking-widest">
+        <span className="font-bold uppercase text-red-700">
           {getGenreFromId(Number(router.query.id))}{" "}
         </span>
-        movies and shows:
+        MOVIES AND SHOWS:
       </p>
       <Results data={genreResult} />
     </>

@@ -6,7 +6,7 @@ function NavLinks() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Movies", href: "/movies" },
-    { name: "TV Series", href: "/series" },
+    { name: "TV Shows", href: "/shows" },
     { name: "People", href: "/people" },
     { name: "Login", href: "/login" },
     { name: "Register", href: "/register" },

@@ -16,9 +16,9 @@ function StarringPage({ credits, person, error }: StarringPageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center">
-        Movies and shows with{" "}
-        <span className="font-bold text-red-700">{person.name}</span>:
+      <p className="pb-4 text-center tracking-widest">
+        MOVIES AND SHOWS WITH{" "}
+        <span className="font-bold uppercase text-red-700">{person.name}</span>:
       </p>
       <Results
         data={credits.cast.sort((a, b) => b.popularity - a.popularity)}
