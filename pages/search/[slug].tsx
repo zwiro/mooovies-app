@@ -6,7 +6,6 @@ import { AnimatePresence } from "framer-motion"
 import CardDetails from "@/components/CardDetails"
 import { useRouter } from "next/router"
 import useCard from "@/hooks/useCard"
-import { usePageLoading } from "@/hooks/usePageLoading"
 
 interface SearchPageProps {
   searchResult: { results: (Movie | Show | Person)[] }
@@ -15,7 +14,6 @@ interface SearchPageProps {
 function SearchPage({ searchResult }: SearchPageProps) {
   const { openedCardId, toggleCard } = useCard()
   const router = useRouter()
-  const { isPageLoading } = usePageLoading()
 
   return (
     <>

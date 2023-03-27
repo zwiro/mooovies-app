@@ -42,10 +42,12 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
     <motion.div
       variants={container}
       {...animation}
-      className="absolute inset-0 z-20 grid place-items-center bg-black/20 p-4 backdrop-blur"
+      onClick={() => toggleCard(null)}
+      className="fixed top-0 left-0 z-20 grid h-screen place-items-center bg-black/20 p-4 backdrop-blur"
     >
       <motion.div
         variants={item}
+        onClick={(e) => e.stopPropagation()}
         className="m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4"
       >
         <div className="flex items-center">
@@ -61,8 +63,8 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           src={displayedPoster}
           onError={() => setDisplayedPoster(posterPlaceholder)}
           alt={`${title} poster`}
-          width={512}
-          height={512}
+          width={360}
+          height={200}
           className="rounded-xl"
         />
         {!isPeople(card) ? (
