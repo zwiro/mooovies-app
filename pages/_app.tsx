@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <main className="overflow-x-hidden px-2 py-4 pb-14">
             {isPageLoading ? (
               <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-                <EllipsisHorizontalCircleIcon className="h-12 w-12 animate-spin" />
+                <EllipsisHorizontalCircleIcon className="h-12 w-12 animate-spin text-red-700" />
               </div>
             ) : (
               <Component {...pageProps} />

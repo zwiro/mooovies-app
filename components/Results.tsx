@@ -5,7 +5,7 @@ import Card from "./Card"
 import CardDetails from "./CardDetails"
 
 interface ResultsProps {
-  data: { results: (Movie | Show | Person)[] }
+  data: (Movie | Show | Person)[]
 }
 
 function Results({ data }: ResultsProps) {
@@ -14,7 +14,7 @@ function Results({ data }: ResultsProps) {
   return (
     <>
       <div className="grid grid-cols-fluid place-items-center gap-4">
-        {data.results.map((result) => (
+        {data.map((result) => (
           <Card
             key={result.id}
             id={result.id}
@@ -30,7 +30,7 @@ function Results({ data }: ResultsProps) {
         {openedCardId && (
           <CardDetails
             card={
-              data.results.find(
+              data.find(
                 (data: Movie | Show | Person) => data.id === openedCardId
               )!
             }

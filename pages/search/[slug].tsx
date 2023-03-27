@@ -2,7 +2,6 @@ import axios from "axios"
 import { Movie, Person, Show } from "@/types"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
-import useCard from "@/hooks/useCard"
 import Results from "@/components/Results"
 
 interface SearchPageProps {
@@ -18,7 +17,7 @@ function SearchPage({ searchResult }: SearchPageProps) {
         Search results for{" "}
         <span className="font-bold text-red-700">{router.query.slug}</span>:
       </p>
-      <Results data={searchResult} />
+      <Results data={searchResult.results} />
     </>
   )
 }

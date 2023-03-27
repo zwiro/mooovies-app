@@ -72,7 +72,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           <>
             <p>{card.overview}</p>
             <span className="text-sm">Released {release}</span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {card.genre_ids.map((id) => (
                 <Link key={id} href={`/genre/${id}`}>
                   <div className="rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
@@ -91,11 +91,18 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                   {card.known_for_department}
                 </span>
               </div>
-              {card.known_for.map((item) => (
-                <div key={item.id} className="font-bold">
-                  {isMovies(item) ? item.title : item.name}
-                </div>
-              ))}
+              <div>
+                {card.known_for.map((item) => (
+                  <div key={item.id} className="font-bold">
+                    {isMovies(item) ? item.title : item.name}
+                  </div>
+                ))}
+                <Link href={`/starring/${card.id}`}>
+                  <button className="my-1 rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
+                    See more
+                  </button>
+                </Link>
+              </div>
             </div>
           </>
         )}

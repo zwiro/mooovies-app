@@ -4,13 +4,18 @@ import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { getGenreFromId } from "@/utils/getGenreFromId"
 import Results from "@/components/Results"
+import { useEffect } from "react"
 
-interface GenrePageProps {
+interface StarringPageProps {
   genreResult: { results: (Movie | Show | Person)[] }
 }
 
-function GenrePage({ genreResult }: GenrePageProps) {
+function StarringPage({ genreResult }: StarringPageProps) {
   const router = useRouter()
+
+  useEffect(() => {
+    if (!genreResult.results.length) router.push("/")
+  }, [genreResult, router])
 
   return (
     <>
@@ -18,7 +23,7 @@ function GenrePage({ genreResult }: GenrePageProps) {
         Browse
         <span className="font-bold text-red-700">
           {" "}
-          {getGenreFromId(Number(router.query.slug))}{" "}
+          {getGenreFromId(Number(router.query.id))}{" "}
         </span>
         genre:
       </p>
@@ -27,13 +32,13 @@ function GenrePage({ genreResult }: GenrePageProps) {
   )
 }
 
-export default GenrePage
+export default StarringPage
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const genreResultRes =
     context.params &&
     (await axios.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${context.params.slug}&with_watch_monetization_types=flatrate`
+      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${context.params.id}&with_watch_monetization_types=flatrate`
     ))
   const genreResult = await genreResultRes?.data
   return {
