@@ -13,9 +13,12 @@ function SearchPage({ searchResult }: SearchPageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center">
-        Search results for{" "}
-        <span className="font-bold text-red-700">{router.query.slug}</span>:
+      <p className="pb-4 text-center tracking-widest">
+        SEARCH RESULTS FOR{" "}
+        <span className="font-bold uppercase text-red-700">
+          {router.query.slug}
+        </span>
+        :
       </p>
       <Results data={searchResult.results} />
     </>
