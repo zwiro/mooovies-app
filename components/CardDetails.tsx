@@ -11,7 +11,6 @@ import axios from "axios"
 interface CardDetailsProps {
   card: Movie | Show | Person
   toggleCard: (id: number | null) => void
-  apiKey: string
 }
 
 function CardDetails({ card, toggleCard }: CardDetailsProps) {
@@ -28,6 +27,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
   >(`https://image.tmdb.org/t/p/w500${image}`)
 
   useEffect(() => {
+    if (isPeople(card)) return
     const type = isMovies(card) ? "movie" : "tv"
     const fetchActors = async () => {
       setIsLoading(true)
@@ -88,10 +88,9 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         />
         {!isPeople(card) ? (
           <>
-            <p>{card.overview}</p>
+            <p className="text-sm">{card.overview}</p>
             <span className="text-sm">Released {release}</span>
             <div>
-              <p>Starring:</p>
               <div className="flex flex-wrap gap-2">
                 {!isLoading ? (
                   actors?.map((actor: Person) => (
@@ -133,7 +132,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                     {isMovies(item) ? item.title : item.name}
                   </div>
                 ))}
-                <Link href={`/starring/${card.id}`}>
+                <Link href={`/person/${card.id}`}>
                   <button className="my-1 rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
                     See more
                   </button>

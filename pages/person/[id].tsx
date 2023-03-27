@@ -17,7 +17,7 @@ function StarringPage({ credits, person, error }: StarringPageProps) {
   return (
     <>
       <p className="pb-4 text-center">
-        Movies and shows starrring{" "}
+        Movies and shows with{" "}
         <span className="font-bold text-red-700">{person.name}</span>:
       </p>
       <Results
