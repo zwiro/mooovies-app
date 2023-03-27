@@ -1,7 +1,7 @@
-import axios from "axios"
+import axios, { all } from "axios"
 import { FetchedDataMovies, GenresTypes } from "@/types"
 import Results from "@/components/Results"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Filters from "@/components/Filters"
 
 interface MoviesPageProps {
@@ -11,7 +11,9 @@ interface MoviesPageProps {
 //todo promise.all
 function MoviesPage({ movies, genres }: MoviesPageProps) {
   const [filters, setFilters] = useState<string[]>([])
-  const [filteredMovies, setFilteredMovies] = useState(movies.results)
+  const [page, setPage] = useState(2)
+  const [allMovies, setAllMovies] = useState(movies.results)
+  const [filteredMovies, setFilteredMovies] = useState(allMovies)
 
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset
@@ -26,20 +28,29 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
     }
   }
 
+  const fetchMoreData = async () => {
+    console.log(page)
+    const moviesRes = await axios.get(`/api/movies?page=${page}`)
+    const movies = await moviesRes.data
+    console.log(movies.results)
+    setAllMovies((prevMovies) => [...prevMovies, ...movies.results])
+    setPage((prevPage) => prevPage + 1)
+  }
+
   useEffect(() => {
     if (!filters.length) {
-      setFilteredMovies(movies.results)
+      setFilteredMovies(allMovies)
     } else {
       setFilteredMovies(() => {
-        const updatedMovies = movies.results.filter((movie) =>
+        const updatedMovies = allMovies.filter((movie) =>
           filters.every((genreId) =>
-            movie.genre_ids.map((id) => id.toString()).includes(genreId)
+            movie?.genre_ids?.map((id) => id.toString()).includes(genreId)
           )
         )
         return updatedMovies
       })
     }
-  }, [filters, movies])
+  }, [filters, allMovies])
 
   return (
     <>
@@ -47,6 +58,7 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
         POPULAR
         <span className="font-bold text-red-700"> MOVIES</span>:
       </p>
+      <button onClick={fetchMoreData}>fetch</button>
       <Filters addFilter={addFilter} filters={filters} genres={genres} />
       <Results data={filteredMovies} />
     </>
