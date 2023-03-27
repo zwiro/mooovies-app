@@ -18,11 +18,9 @@ function GenrePage({ movies, shows }: GenrePageProps) {
     (a, b) => b.popularity - a.popularity
   )
 
-  console.log(genreResult)
-
   useEffect(() => {
-    if (!movies.results || !shows.results) router.push("/")
-  }, [movies, shows, router])
+    if (!getGenreFromId(Number(router.query.id))) router.push("/")
+  }, [router])
 
   return (
     <>
@@ -44,7 +42,7 @@ export default GenrePage
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const [moviesRes, showsRes] = await Promise.all([
     axios.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genre=${context.params?.id}`
+      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${context.params?.id}`
     ),
     axios.get(
       `https://api.themoviedb.org/3/discover/tv?api_key=${process.env.TMDB_API_KEY}&sort_by=popularity.desc&page=1&with_genres=${context.params?.id}`

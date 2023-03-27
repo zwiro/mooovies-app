@@ -1,33 +1,28 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { Movie, Person, Show } from "@/types"
 import { GetServerSidePropsContext } from "next"
-import { useRouter } from "next/router"
-import { getGenreFromId } from "@/utils/getGenreFromId"
 import Results from "@/components/Results"
-import { useEffect } from "react"
 
 interface StarringPageProps {
-  genreResult: { results: (Movie | Show | Person)[] }
+  credits: { cast: (Movie | Show | Person)[] }
+  person: Person
+  error?: AxiosError
 }
 
-function StarringPage({ genreResult }: StarringPageProps) {
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!genreResult.results.length) router.push("/")
-  }, [genreResult, router])
+function StarringPage({ credits, person, error }: StarringPageProps) {
+  if (error) {
+    return <div className="text-center">Person not found</div>
+  }
 
   return (
     <>
       <p className="pb-4 text-center">
-        Browse
-        <span className="font-bold text-red-700">
-          {" "}
-          {getGenreFromId(Number(router.query.id))}{" "}
-        </span>
-        genre:
+        Movies and shows starrring{" "}
+        <span className="font-bold text-red-700">{person.name}</span>:
       </p>
-      <Results data={genreResult} />
+      <Results
+        data={credits.cast.sort((a, b) => b.popularity - a.popularity)}
+      />
     </>
   )
 }
@@ -35,15 +30,28 @@ function StarringPage({ genreResult }: StarringPageProps) {
 export default StarringPage
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const genreResultRes =
-    context.params &&
-    (await axios.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${context.params.id}&with_watch_monetization_types=flatrate`
-    ))
-  const genreResult = await genreResultRes?.data
-  return {
-    props: {
-      genreResult,
-    },
+  try {
+    const [creditsRes, personRes] = await Promise.all([
+      axios.get(
+        `https://api.themoviedb.org/3/person/${context.params?.id}/combined_credits?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+      ),
+      axios.get(
+        `https://api.themoviedb.org/3/person/${context.params?.id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+      ),
+    ])
+    const [credits, person] = await Promise.all([
+      creditsRes.data,
+      personRes.data,
+    ])
+    return {
+      props: {
+        credits,
+        person,
+      },
+    }
+  } catch (error: any) {
+    return {
+      props: { error: error.message },
+    }
   }
 }
