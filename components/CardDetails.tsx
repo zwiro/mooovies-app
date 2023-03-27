@@ -1,5 +1,5 @@
 import { isMovies, isPeople, Movie, Person, Show } from "@/types"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import Image, { StaticImageData } from "next/image"
 import { useState, useEffect } from "react"
 import posterPlaceholder from "@/public/poster_placeholder.png"
@@ -89,7 +89,13 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         {!isPeople(card) ? (
           <>
             <p className="text-sm">{card.overview}</p>
-            <span className="text-sm">Released {release}</span>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Released {release}</span>
+              <div className="flex items-center gap-1">
+                <StarIcon className="h-4 w-4 text-red-700" />
+                <span>{card.vote_average}</span>
+              </div>
+            </div>
             <div>
               <div className="flex flex-wrap gap-2">
                 {!isLoading ? (

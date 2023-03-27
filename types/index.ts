@@ -59,6 +59,15 @@ export interface DataTypes {
   people: FetchedDataPeople
 }
 
+export interface Genre {
+  id: number
+  name: string
+}
+
+export interface GenresTypes {
+  genres: Genre[]
+}
+
 export function isPeople(data: Person | Movie | Show): data is Person {
   return "profile_path" in data
 }
