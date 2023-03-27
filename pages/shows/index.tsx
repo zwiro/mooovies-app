@@ -1,9 +1,9 @@
 import axios from "axios"
-import { FetchedDataPeople } from "@/types"
+import { FetchedDataShows } from "@/types"
 import Results from "@/components/Results"
 
 interface ShowsPageProps {
-  people: FetchedDataPeople
+  shows: FetchedDataShows
 }
 
 function ShowsPage({ shows }: ShowsPageProps) {
