@@ -5,6 +5,7 @@ import { useState } from "react"
 import posterPlaceholder from "@/public/poster_placeholder.png"
 import { getGenreFromId } from "@/utils/getGenreFromId"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 interface CardDetailsProps {
   card: Movie | Show | Person
@@ -64,7 +65,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           onError={() => setDisplayedPoster(posterPlaceholder)}
           alt={`${title} poster`}
           width={360}
-          height={200}
+          height={isPeople(card) ? 540 : 200}
           className="rounded-xl"
         />
         {!isPeople(card) ? (
@@ -73,9 +74,11 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
             <span className="text-sm">Released {release}</span>
             <div className="flex gap-2">
               {card.genre_ids.map((id) => (
-                <div key={id} className="rounded bg-red-700 px-1">
-                  {getGenreFromId(id)}
-                </div>
+                <Link key={id} href={`/genre/${id}`}>
+                  <div className="rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
+                    {getGenreFromId(id)}
+                  </div>
+                </Link>
               ))}
             </div>
           </>
