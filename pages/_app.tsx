@@ -17,9 +17,9 @@ export default function App({ Component, pageProps }: AppProps) {
   const { isPageLoading } = usePageLoading()
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={`${roboto.className} min-h-screen`}>
+      <div className={`${roboto.className} relative min-h-screen`}>
         <Layout>
-          <main className="overflow-x-hidden px-2 py-4">
+          <main className="overflow-x-hidden px-2 py-4 pb-14">
             {isPageLoading ? (
               <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
                 <EllipsisHorizontalCircleIcon className="h-12 w-12 animate-spin" />
