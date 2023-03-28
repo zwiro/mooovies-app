@@ -1,3 +1,4 @@
+import useExpand from "@/hooks/useExpand"
 import { Genre, GenresTypes } from "@/types"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { motion, AnimatePresence } from "framer-motion"
@@ -10,7 +11,7 @@ interface FiltersProps {
 }
 
 function Filters({ addFilter, filters, genres }: FiltersProps) {
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false)
+  const { isExpanded, expand } = useExpand()
 
   const filtersAnimation = {
     initial: { height: 0, opacity: 0, padding: 0 },
@@ -26,18 +27,18 @@ function Filters({ addFilter, filters, genres }: FiltersProps) {
   return (
     <div className="flex flex-col pb-4">
       <div
-        onClick={() => setIsFiltersExpanded((prevExpanded) => !prevExpanded)}
+        onClick={expand}
         className="group flex w-max cursor-pointer items-center gap-1"
       >
         <p className="transition-colors group-hover:text-red-700">Filters</p>
         <ChevronDownIcon
           className={`h-5 w-5 transition-transform ${
-            isFiltersExpanded && "rotate-180"
+            isExpanded && "rotate-180"
           }`}
         />
       </div>
       <AnimatePresence>
-        {isFiltersExpanded && (
+        {isExpanded && (
           <motion.div
             {...filtersAnimation}
             className="flex flex-wrap gap-2 pb-4"

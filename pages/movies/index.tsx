@@ -1,11 +1,12 @@
 import axios from "axios"
 import { FetchedDataMovies, GenresTypes, SortOptions } from "@/types"
 import Results from "@/components/Results"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Filters from "@/components/Filters"
-import { useQuery } from "react-query"
+import { useInfiniteQuery } from "react-query"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import Sorting from "@/components/Sorting"
+import { useInView } from "framer-motion"
 
 interface MoviesPageProps {
   movies: FetchedDataMovies
@@ -14,9 +15,11 @@ interface MoviesPageProps {
 
 function MoviesPage({ movies, genres }: MoviesPageProps) {
   const [filters, setFilters] = useState<string[]>([])
-  const [page, setPage] = useState(1)
   const [allMovies, setAllMovies] = useState(movies.results)
   const [sortBy, setSortBy] = useState<SortOptions>(SortOptions.popularityDesc)
+
+  const ref = useRef(null)
+  const isInView = useInView(ref)
 
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset
@@ -35,18 +38,31 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
     setSortBy(option)
   }
 
-  const fetchMoreData = async () => {
+  const fetchMoreData = async (page: number) => {
     const moviesRes = await axios.get(
       `/api/movies?page=${page}&genres=${filters}&sort=${sortBy}`
     )
     const movies = await moviesRes.data
-    setAllMovies(movies.results)
+    if (page > 1) {
+      setAllMovies((prevMovies) => [...prevMovies, ...movies.results])
+    } else {
+      setAllMovies(movies.results)
+    }
   }
 
-  const { isLoading, isError } = useQuery(
-    ["movies", filters, sortBy],
-    fetchMoreData
-  )
+  const { isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["movies", filters, sortBy],
+      queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = allMovies.length < 20 ? undefined : allPages.length + 1
+        return nextPage
+      },
+    })
+
+  useEffect(() => {
+    fetchNextPage()
+  }, [isInView, fetchNextPage])
 
   return (
     <>
@@ -68,6 +84,12 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
         <Results data={allMovies} />
       ) : (
         <p className="text-center">No movies found with chosen genres</p>
+      )}
+      <div ref={ref} />
+      {isFetchingNextPage && (
+        <div className="flex justify-center">
+          <LoadingSpinner />
+        </div>
       )}
     </>
   )
