@@ -67,7 +67,7 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
 
 export default MoviesPage
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const moviesRes = await axios.get(
     `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
   )
@@ -81,5 +81,6 @@ export async function getServerSideProps() {
       movies,
       genres,
     },
+    revalidate: 21600,
   }
 }

@@ -20,7 +20,7 @@ function PeoplePage({ people }: PeoplePageProps) {
 
 export default PeoplePage
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const peopleRes = await axios.get(
     `https://api.themoviedb.org/3/person/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
   )
@@ -29,5 +29,6 @@ export async function getServerSideProps() {
     props: {
       people,
     },
+    revalidate: 21600,
   }
 }

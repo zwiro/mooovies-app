@@ -20,7 +20,7 @@ function ShowsPage({ shows }: ShowsPageProps) {
 
 export default ShowsPage
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const showsRes = await axios.get(
     `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
   )
@@ -29,5 +29,6 @@ export async function getServerSideProps() {
     props: {
       shows,
     },
+    revalidate: 21600,
   }
 }
