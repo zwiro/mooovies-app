@@ -27,7 +27,7 @@ function Filters({ addFilter, filters, genres }: FiltersProps) {
     <div className="flex flex-col pb-4">
       <div
         onClick={() => setIsFiltersExpanded((prevExpanded) => !prevExpanded)}
-        className="group flex cursor-pointer items-center gap-1"
+        className="group flex w-max cursor-pointer items-center gap-1"
       >
         <p className="transition-colors group-hover:text-red-700">Filters</p>
         <ChevronDownIcon
