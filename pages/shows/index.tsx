@@ -20,7 +20,10 @@ function ShowsPage({ shows, genres }: ShowsPageProps) {
   const [sortBy, setSortBy] = useState<SortOptions>(SortOptions.popularityDesc)
 
   const { isLoading, isError, allData, isFetchingNextPage, ref } =
-    useInfiniteScroll(shows.results, "shows", filters.join(","), sortBy)
+    useInfiniteScroll(shows.results, "shows", {
+      filters: filters,
+      sortBy: sortBy,
+    })
 
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset

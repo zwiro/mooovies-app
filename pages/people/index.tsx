@@ -13,7 +13,7 @@ interface PeoplePageProps {
 
 function PeoplePage({ people }: PeoplePageProps) {
   const { isLoading, isError, allData, isFetchingNextPage, ref } =
-    useInfiniteScroll(people.results, "people")
+    useInfiniteScroll(people.results, "people", {})
 
   return (
     <>

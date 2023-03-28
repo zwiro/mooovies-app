@@ -11,6 +11,7 @@ function useInfiniteScroll(
 ) {
   const [allData, setAllData] = useState(initialState)
   const { query, filters, sortBy } = criteria
+  console.log(criteria)
 
   const ref = useRef(null)
   const isInView = useInView(ref)
