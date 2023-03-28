@@ -16,6 +16,10 @@ export interface FetchedDataPeople extends FetchedData {
   results: Person[]
 }
 
+export interface SearchedData extends FetchedData {
+  results: Show[] | Movie[] | Person[]
+}
+
 interface Data {
   backdrop_path: string
   genre_ids: number[]

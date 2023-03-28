@@ -4,20 +4,20 @@ import axios from "axios"
 import { useInfiniteQuery } from "react-query"
 import { Movie, Person, Show } from "@/types"
 
-function useFetchMoreData(
+function useInfiniteScroll(
   initialState: Movie[] | Person[] | Show[],
   apiUrl: string,
-  ...criteria: string[]
+  criteria: { query?: string; filters?: string[]; sortBy?: string }
 ) {
   const [allData, setAllData] = useState(initialState)
-  const [filters, sortBy] = criteria
+  const { query, filters, sortBy } = criteria
 
   const ref = useRef(null)
   const isInView = useInView(ref)
 
   const fetchMoreData = async (page: number) => {
     const dataRes = await axios.get(
-      `/api/${apiUrl}?page=${page}&genres=${filters}&sort=${sortBy}`
+      `/api/${apiUrl}?page=${page}&genres=${filters}&sort=${sortBy}&query=${query}`
     )
     const response = await dataRes.data
     if (page > 1) {
@@ -50,4 +50,4 @@ function useFetchMoreData(
   }
 }
 
-export default useFetchMoreData
+export default useInfiniteScroll

@@ -5,7 +5,7 @@ import { useInfiniteQuery } from "react-query"
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "framer-motion"
 import LoadingSpinner from "@/components/LoadingSpinner"
-import useFetchMoreData from "@/hooks/useFetchMoreData"
+import useInfiniteScroll from "@/hooks/useInfiniteScroll"
 
 interface PeoplePageProps {
   people: FetchedDataPeople
@@ -13,7 +13,7 @@ interface PeoplePageProps {
 
 function PeoplePage({ people }: PeoplePageProps) {
   const { isLoading, isError, allData, isFetchingNextPage, ref } =
-    useFetchMoreData(people.results, "people")
+    useInfiniteScroll(people.results, "people")
 
   return (
     <>

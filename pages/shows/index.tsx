@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/LoadingSpinner"
 import Sorting from "@/components/Sorting"
 import { useInView } from "framer-motion"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
-import useFetchMoreData from "@/hooks/useFetchMoreData"
+import useInfiniteScroll from "@/hooks/useInfiniteScroll"
 
 interface ShowsPageProps {
   shows: FetchedDataShows
@@ -20,7 +20,7 @@ function ShowsPage({ shows, genres }: ShowsPageProps) {
   const [sortBy, setSortBy] = useState<SortOptions>(SortOptions.popularityDesc)
 
   const { isLoading, isError, allData, isFetchingNextPage, ref } =
-    useFetchMoreData(shows.results, "shows", filters.join(","), sortBy)
+    useInfiniteScroll(shows.results, "shows", filters.join(","), sortBy)
 
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset
