@@ -42,8 +42,8 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
   }
 
   const item = {
-    hidden: { scale: 0 },
-    show: { scale: 1 },
+    hidden: { scale: 0, height: "auto" },
+    show: { scale: 1, height: "auto" },
   }
 
   const animation = {

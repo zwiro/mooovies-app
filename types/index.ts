@@ -68,6 +68,15 @@ export interface GenresTypes {
   genres: Genre[]
 }
 
+export enum SortOptions {
+  popularityDesc = "popularity.desc",
+  popularityAsc = "popularity.asc",
+  releaseDateDesc = "release_date.desc",
+  releaseDateAsc = "release_date.asc",
+  revenueDesc = "revenue.desc",
+  revenueAsc = "revenue.asc",
+}
+
 export function isPeople(data: Person | Movie | Show): data is Person {
   return "profile_path" in data
 }
