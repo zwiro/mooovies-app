@@ -1,19 +1,19 @@
-import axios, { all } from "axios"
+import axios from "axios"
 import { FetchedDataMovies, GenresTypes } from "@/types"
 import Results from "@/components/Results"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import Filters from "@/components/Filters"
+import { useQuery } from "react-query"
+import LoadingSpinner from "@/components/LoadingSpinner"
 
 interface MoviesPageProps {
   movies: FetchedDataMovies
   genres: GenresTypes
 }
-//todo promise.all
 function MoviesPage({ movies, genres }: MoviesPageProps) {
   const [filters, setFilters] = useState<string[]>([])
-  const [page, setPage] = useState(2)
+  const [page, setPage] = useState(1)
   const [allMovies, setAllMovies] = useState(movies.results)
-  const [filteredMovies, setFilteredMovies] = useState(allMovies)
 
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset
@@ -29,28 +29,14 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
   }
 
   const fetchMoreData = async () => {
-    console.log(page)
-    const moviesRes = await axios.get(`/api/movies?page=${page}`)
+    const moviesRes = await axios.get(
+      `/api/movies?page=${page}&genres=${filters}`
+    )
     const movies = await moviesRes.data
-    console.log(movies.results)
-    setAllMovies((prevMovies) => [...prevMovies, ...movies.results])
-    setPage((prevPage) => prevPage + 1)
+    setAllMovies(movies.results)
   }
 
-  useEffect(() => {
-    if (!filters.length) {
-      setFilteredMovies(allMovies)
-    } else {
-      setFilteredMovies(() => {
-        const updatedMovies = allMovies.filter((movie) =>
-          filters.every((genreId) =>
-            movie?.genre_ids?.map((id) => id.toString()).includes(genreId)
-          )
-        )
-        return updatedMovies
-      })
-    }
-  }, [filters, allMovies])
+  const { isLoading, isError } = useQuery(["movies", filters], fetchMoreData)
 
   return (
     <>
@@ -58,9 +44,14 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
         POPULAR
         <span className="font-bold text-red-700"> MOVIES</span>:
       </p>
-      <button onClick={fetchMoreData}>fetch</button>
       <Filters addFilter={addFilter} filters={filters} genres={genres} />
-      <Results data={filteredMovies} />
+      {isLoading && (
+        <div className="absolute inset-x-0 flex justify-center">
+          <LoadingSpinner />
+        </div>
+      )}
+      {isError && <div className="text-center">Error while loading data</div>}
+      <Results data={allMovies} />
     </>
   )
 }
@@ -68,14 +59,16 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
 export default MoviesPage
 
 export async function getStaticProps() {
-  const moviesRes = await axios.get(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
-  )
-  const genresRes = await axios.get(
-    `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.TMDB_API_KEY}&language=en-US`
-  )
-  const movies = await moviesRes?.data
-  const genres = await genresRes.data
+  const [moviesRes, genresRes] = await Promise.all([
+    axios.get(
+      `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+    ),
+    axios.get(
+      `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+    ),
+  ])
+
+  const [movies, genres] = await Promise.all([moviesRes.data, genresRes.data])
   return {
     props: {
       movies,

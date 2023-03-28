@@ -93,7 +93,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
               <span className="text-sm">Released {release}</span>
               <div className="flex items-center gap-1">
                 <StarIcon className="h-4 w-4 text-red-700" />
-                <span>{card.vote_average}</span>
+                <span>{card.vote_average.toFixed(1)}</span>
               </div>
             </div>
             <div>

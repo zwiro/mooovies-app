@@ -27,9 +27,9 @@ function Filters({ addFilter, filters, genres }: FiltersProps) {
     <div className="flex flex-col pb-4">
       <div
         onClick={() => setIsFiltersExpanded((prevExpanded) => !prevExpanded)}
-        className="flex cursor-pointer items-center gap-1"
+        className="group flex cursor-pointer items-center gap-1"
       >
-        <p>Filters</p>
+        <p className="transition-colors group-hover:text-red-700">Filters</p>
         <ChevronDownIcon
           className={`h-5 w-5 transition-transform ${
             isFiltersExpanded && "rotate-180"

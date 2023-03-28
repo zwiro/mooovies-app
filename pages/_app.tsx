@@ -5,6 +5,7 @@ import type { AppProps } from "next/app"
 import { Roboto } from "next/font/google"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/solid"
+import LoadingSpinner from "@/components/LoadingSpinner"
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -22,7 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <main className="overflow-x-hidden px-2 py-4 pb-14">
             {isPageLoading ? (
               <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-                <EllipsisHorizontalCircleIcon className="h-12 w-12 animate-spin text-red-700" />
+                <LoadingSpinner />
               </div>
             ) : (
               <Component {...pageProps} />
