@@ -8,6 +8,7 @@ import LoadingSpinner from "@/components/LoadingSpinner"
 import Sorting from "@/components/Sorting"
 import { useInView } from "framer-motion"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
+import useFetchMoreData from "@/hooks/useFetchMoreData"
 
 interface ShowsPageProps {
   shows: FetchedDataShows
@@ -16,11 +17,10 @@ interface ShowsPageProps {
 
 function ShowsPage({ shows, genres }: ShowsPageProps) {
   const [filters, setFilters] = useState<string[]>([])
-  const [allShows, setAllShows] = useState(shows.results)
   const [sortBy, setSortBy] = useState<SortOptions>(SortOptions.popularityDesc)
 
-  const ref = useRef(null)
-  const isInView = useInView(ref)
+  const { isLoading, isError, allData, isFetchingNextPage, ref } =
+    useFetchMoreData(shows.results, "shows", filters.join(","), sortBy)
 
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset
@@ -39,32 +39,6 @@ function ShowsPage({ shows, genres }: ShowsPageProps) {
     setSortBy(option)
   }
 
-  const fetchMoreData = async (page: number) => {
-    const showsRes = await axios.get(
-      `/api/shows?page=${page}&genres=${filters}&sort=${sortBy}`
-    )
-    const shows = await showsRes.data
-    if (page > 1) {
-      setAllShows((prevShows) => [...prevShows, ...shows.results])
-    } else {
-      setAllShows(shows.results)
-    }
-  }
-
-  const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["shows", filters, sortBy],
-      queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allShows.length < 20 ? undefined : allPages.length + 1
-        return nextPage
-      },
-    })
-
-  useEffect(() => {
-    fetchNextPage()
-  }, [isInView, fetchNextPage])
-
   return (
     <>
       <p className="pb-4 text-center tracking-widest">
@@ -81,12 +55,12 @@ function ShowsPage({ shows, genres }: ShowsPageProps) {
         </div>
       )}
       {isError && <div className="text-center">Error while loading data</div>}
-      {allShows.length ? (
-        <Results data={allShows} />
+      {allData.length ? (
+        <Results data={allData} />
       ) : (
         <p className="text-center">No shows found with chosen genres</p>
       )}
-      {allShows.length ? <div ref={ref} /> : ""}
+      {allData.length ? <div ref={ref} /> : ""}
       {isFetchingNextPage && (
         <div className="flex justify-center">
           <LoadingSpinner />

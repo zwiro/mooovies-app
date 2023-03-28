@@ -8,6 +8,7 @@ import LoadingSpinner from "@/components/LoadingSpinner"
 import Sorting from "@/components/Sorting"
 import { useInView } from "framer-motion"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
+import useFetchMoreData from "@/hooks/useFetchMoreData"
 
 interface MoviesPageProps {
   movies: FetchedDataMovies
@@ -16,12 +17,10 @@ interface MoviesPageProps {
 
 function MoviesPage({ movies, genres }: MoviesPageProps) {
   const [filters, setFilters] = useState<string[]>([])
-  const [allMovies, setAllMovies] = useState(movies.results)
   const [sortBy, setSortBy] = useState<SortOptions>(SortOptions.popularityDesc)
 
-  const ref = useRef(null)
-  const isInView = useInView(ref)
-
+  const { isLoading, isError, allData, isFetchingNextPage, ref } =
+    useFetchMoreData(movies.results, "movies", filters.join(","), sortBy)
   const addFilter = (e: React.MouseEvent) => {
     const { id } = (e.target as HTMLButtonElement).dataset
     if (!id) return
@@ -39,32 +38,6 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
     setSortBy(option)
   }
 
-  const fetchMoreData = async (page: number) => {
-    const moviesRes = await axios.get(
-      `/api/movies?page=${page}&genres=${filters}&sort=${sortBy}`
-    )
-    const movies = await moviesRes.data
-    if (page > 1) {
-      setAllMovies((prevMovies) => [...prevMovies, ...movies.results])
-    } else {
-      setAllMovies(movies.results)
-    }
-  }
-
-  const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["movies", filters, sortBy],
-      queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allMovies.length < 20 ? undefined : allPages.length + 1
-        return nextPage
-      },
-    })
-
-  useEffect(() => {
-    fetchNextPage()
-  }, [isInView, fetchNextPage])
-
   return (
     <>
       <p className="pb-4 text-center tracking-widest">
@@ -81,12 +54,12 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
         </div>
       )}
       {isError && <div className="text-center">Error while loading data</div>}
-      {allMovies.length ? (
-        <Results data={allMovies} />
+      {allData.length ? (
+        <Results data={allData} />
       ) : (
         <p className="text-center">No movies found with chosen genres</p>
       )}
-      {allMovies.length && <div ref={ref} />}
+      {allData.length && <div ref={ref} />}
       {isFetchingNextPage && (
         <div className="flex justify-center">
           <LoadingSpinner />

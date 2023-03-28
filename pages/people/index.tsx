@@ -5,41 +5,15 @@ import { useInfiniteQuery } from "react-query"
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "framer-motion"
 import LoadingSpinner from "@/components/LoadingSpinner"
+import useFetchMoreData from "@/hooks/useFetchMoreData"
 
 interface PeoplePageProps {
   people: FetchedDataPeople
 }
 
 function PeoplePage({ people }: PeoplePageProps) {
-  console.log(people.results)
-  const [allPeople, setAllPeople] = useState(people.results)
-
-  const ref = useRef(null)
-  const isInView = useInView(ref)
-
-  const fetchMoreData = async (page: number) => {
-    const peopleRes = await axios.get(`/api/people?page=${page}`)
-    const people = await peopleRes.data
-    if (page > 1) {
-      setAllPeople((prevPeople) => [...prevPeople, ...people.results])
-    } else {
-      setAllPeople(people.results)
-    }
-  }
-
-  const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["people"],
-      queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPeople.length < 20 ? undefined : allPages.length + 1
-        return nextPage
-      },
-    })
-
-  useEffect(() => {
-    fetchNextPage()
-  }, [isInView, fetchNextPage])
+  const { isLoading, isError, allData, isFetchingNextPage, ref } =
+    useFetchMoreData(people.results, "people")
 
   return (
     <>
@@ -53,12 +27,12 @@ function PeoplePage({ people }: PeoplePageProps) {
         </div>
       )}
       {isError && <div className="text-center">Error while loading data</div>}
-      {allPeople.length ? (
-        <Results data={allPeople} />
+      {allData.length ? (
+        <Results data={allData} />
       ) : (
         <p className="text-center">No people found</p>
       )}
-      {allPeople.length ? <div ref={ref} /> : ""}
+      {allData.length ? <div ref={ref} /> : ""}
 
       {isFetchingNextPage && (
         <div className="flex justify-center">
