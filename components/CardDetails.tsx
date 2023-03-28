@@ -16,6 +16,7 @@ interface CardDetailsProps {
 }
 
 function CardDetails({ card, toggleCard }: CardDetailsProps) {
+  const [isTextExpanded, setIsTextExpanded] = useState(false)
   const title = isMovies(card) ? card.title : card.name
   const image = isPeople(card) ? card.profile_path : card.backdrop_path
   const release = isMovies(card)
@@ -64,7 +65,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         className="m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4"
       >
         <div className="flex items-center">
-          <h3 className="text-xl font-bold tracking-widest text-red-700">
+          <h3 className="max-w-xs text-xl font-bold tracking-widest text-red-700">
             {title}
           </h3>
           <XMarkIcon
@@ -82,7 +83,14 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         />
         {!isPeople(card) ? (
           <>
-            <p className="text-sm">{card.overview}</p>
+            <p
+              onClick={() => setIsTextExpanded((prevExpanded) => !prevExpanded)}
+              className={`cursor-pointer text-sm ${
+                isTextExpanded ? "line-clamp-none" : "line-clamp-6"
+              }`}
+            >
+              {card.overview}
+            </p>
             <div className="flex items-center justify-between">
               <span className="text-sm">Released {release}</span>
               <div className="flex items-center gap-1">

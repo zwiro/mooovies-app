@@ -51,7 +51,11 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
         </div>
       )}
       {isError && <div className="text-center">Error while loading data</div>}
-      <Results data={allMovies} />
+      {allMovies.length ? (
+        <Results data={allMovies} />
+      ) : (
+        <p className="text-center">No movies found with chosen genres</p>
+      )}
     </>
   )
 }
