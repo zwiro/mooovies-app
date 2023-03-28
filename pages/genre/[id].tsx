@@ -4,7 +4,10 @@ import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
 import { getGenreFromId } from "@/utils/getGenreFromId"
 import Results from "@/components/Results"
-import { useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import { useInView } from "framer-motion"
+import { useInfiniteQuery } from "react-query"
 
 interface GenrePageProps {
   movies: { results: Movie[] }
@@ -14,9 +17,49 @@ interface GenrePageProps {
 function GenrePage({ movies, shows }: GenrePageProps) {
   const router = useRouter()
 
-  const genreResult = [...movies.results, ...shows.results].sort(
-    (a, b) => b.popularity - a.popularity
+  const id = router.query.id
+
+  const [allResults, setAllResults] = useState(
+    [...movies.results, ...shows.results].sort(
+      (a: Movie | Show, b: Movie | Show) => b.popularity - a.popularity
+    )
   )
+
+  const ref = useRef(null)
+  const isInView = useInView(ref)
+
+  const fetchMoreData = async (page: number) => {
+    const dataRes = await axios.get(`/api/combined?page=${page}&genre=${id}`)
+    const data = await dataRes.data
+    if (page > 1) {
+      setAllResults((prevResults) =>
+        [...prevResults, ...data].sort(
+          (a: Movie | Show, b: Movie | Show) => b.popularity - a.popularity
+        )
+      )
+    } else {
+      setAllResults(
+        data.sort(
+          (a: Movie | Show, b: Movie | Show) => b.popularity - a.popularity
+        )
+      )
+    }
+  }
+
+  const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["combined"],
+      queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          allResults.length < 20 ? undefined : allPages.length + 1
+        return nextPage
+      },
+    })
+
+  useEffect(() => {
+    fetchNextPage()
+  }, [isInView, fetchNextPage])
 
   useEffect(() => {
     if (!getGenreFromId(Number(router.query.id))) router.push("/")
@@ -30,7 +73,24 @@ function GenrePage({ movies, shows }: GenrePageProps) {
         </span>
         MOVIES AND SHOWS:
       </p>
-      <Results data={genreResult} />
+      {isLoading && (
+        <div className="absolute inset-x-0 flex justify-center">
+          <LoadingSpinner />
+        </div>
+      )}
+      {isError && <div className="text-center">Error while loading data</div>}
+      {allResults.length ? (
+        <Results data={allResults} />
+      ) : (
+        <p className="text-center">No results found</p>
+      )}
+      {allResults.length ? <div ref={ref} /> : ""}
+
+      {isFetchingNextPage && (
+        <div className="flex justify-center">
+          <LoadingSpinner />
+        </div>
+      )}
     </>
   )
 }
