@@ -7,6 +7,7 @@ import { useInfiniteQuery } from "react-query"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import Sorting from "@/components/Sorting"
 import { useInView } from "framer-motion"
+import { ChevronDownIcon } from "@heroicons/react/24/solid"
 
 interface MoviesPageProps {
   movies: FetchedDataMovies
@@ -50,7 +51,7 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
     }
   }
 
-  const { isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["movies", filters, sortBy],
       queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
@@ -67,7 +68,7 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
   return (
     <>
       <p className="pb-4 text-center tracking-widest">
-        POPULAR
+        <span>POPULAR</span>
         <span className="font-bold text-red-700"> MOVIES</span>:
       </p>
       <div className="flex justify-between">
@@ -85,7 +86,7 @@ function MoviesPage({ movies, genres }: MoviesPageProps) {
       ) : (
         <p className="text-center">No movies found with chosen genres</p>
       )}
-      <div ref={ref} />
+      {allMovies.length && <div ref={ref} />}
       {isFetchingNextPage && (
         <div className="flex justify-center">
           <LoadingSpinner />

@@ -77,6 +77,14 @@ export enum SortOptions {
   revenueAsc = "revenue.asc",
 }
 
+export enum PageTypes {
+  popular = "popular",
+  latest = "latest",
+  topRated = "top_rated",
+  upcoming = "upcoming",
+  nowPlaying = "now_playing",
+}
+
 export function isPeople(data: Person | Movie | Show): data is Person {
   return "profile_path" in data
 }

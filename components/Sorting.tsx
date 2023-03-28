@@ -58,27 +58,25 @@ function Sorting({ sort, sortBy }: SortingProps) {
       </div>
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <motion.ul
             {...sortingAnimation}
             className="absolute -left-16 z-50 rounded bg-black/20 backdrop-blur"
           >
-            <ul>
-              {options.map((option, i) => (
-                <li
-                  key={i}
-                  onClick={() => sort(option.value)}
-                  className={`flex cursor-pointer items-center justify-end gap-1 p-1 text-sm hover:text-red-700 ${
-                    sortBy === option.value && "text-red-700"
-                  } `}
-                >
-                  {option.name}{" "}
-                  <ChevronDownIcon
-                    className={`h-4 w-4 ${i % 2 && "rotate-180"} `}
-                  />{" "}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+            {options.map((option, i) => (
+              <li
+                key={i}
+                onClick={() => sort(option.value)}
+                className={`flex cursor-pointer items-center justify-end gap-1 p-1 text-sm hover:text-red-700 ${
+                  sortBy === option.value && "text-red-700"
+                } `}
+              >
+                {option.name}{" "}
+                <ChevronDownIcon
+                  className={`h-4 w-4 ${i % 2 && "rotate-180"} `}
+                />{" "}
+              </li>
+            ))}
+          </motion.ul>
         )}
       </AnimatePresence>
     </div>
