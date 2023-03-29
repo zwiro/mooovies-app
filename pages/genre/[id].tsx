@@ -8,6 +8,10 @@ import { useEffect, useRef, useState } from "react"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import { useInView } from "framer-motion"
 import { useInfiniteQuery } from "react-query"
+import Filters from "@/components/Filters"
+import Sorting from "@/components/Sorting"
+import useFilter from "@/hooks/useFilter"
+import useSort from "@/hooks/useSort"
 
 interface GenrePageProps {
   movies: { results: Movie[] }
@@ -15,6 +19,7 @@ interface GenrePageProps {
 }
 
 function GenrePage({ movies, shows }: GenrePageProps) {
+  const { sortBy, sort } = useSort()
   const router = useRouter()
 
   const id = router.query.id
@@ -29,26 +34,20 @@ function GenrePage({ movies, shows }: GenrePageProps) {
   const isInView = useInView(ref)
 
   const fetchMoreData = async (page: number) => {
-    const dataRes = await axios.get(`/api/combined?page=${page}&genre=${id}`)
+    const dataRes = await axios.get(
+      `/api/combined?page=${page}&genre=${id}&sort=${sortBy}`
+    )
     const data = await dataRes.data
     if (page > 1) {
-      setAllResults((prevResults) =>
-        [...prevResults, ...data].sort(
-          (a: Movie | Show, b: Movie | Show) => b.popularity - a.popularity
-        )
-      )
+      setAllResults((prevResults) => [...prevResults, ...data])
     } else {
-      setAllResults(
-        data.sort(
-          (a: Movie | Show, b: Movie | Show) => b.popularity - a.popularity
-        )
-      )
+      setAllResults(data)
     }
   }
 
   const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["combined"],
+      queryKey: ["combined", { sortBy }],
       queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
       getNextPageParam: (lastPage, allPages) => {
         const nextPage =
@@ -73,6 +72,9 @@ function GenrePage({ movies, shows }: GenrePageProps) {
         </span>
         MOVIES AND SHOWS:
       </p>
+      <div className="flex justify-end">
+        <Sorting sort={sort} sortBy={sortBy} />
+      </div>
       {isLoading && (
         <div className="absolute inset-x-0 flex justify-center">
           <LoadingSpinner />

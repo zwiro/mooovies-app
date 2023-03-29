@@ -9,6 +9,8 @@ import Sorting from "@/components/Sorting"
 import { useInView } from "framer-motion"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import useInfiniteScroll from "@/hooks/useInfiniteScroll"
+import useFilter from "@/hooks/useFilter"
+import useSort from "@/hooks/useSort"
 
 interface ShowsPageProps {
   shows: FetchedDataShows
@@ -16,31 +18,14 @@ interface ShowsPageProps {
 }
 
 function ShowsPage({ shows, genres }: ShowsPageProps) {
-  const [filters, setFilters] = useState<string[]>([])
-  const [sortBy, setSortBy] = useState<SortOptions>(SortOptions.popularityDesc)
+  const { filters, addFilter } = useFilter()
+  const { sortBy, sort } = useSort()
 
   const { isLoading, isError, allData, isFetchingNextPage, ref } =
     useInfiniteScroll(shows.results, "shows", {
       filters: filters,
       sortBy: sortBy,
     })
-
-  const addFilter = (e: React.MouseEvent) => {
-    const { id } = (e.target as HTMLButtonElement).dataset
-    if (!id) return
-    if (filters.includes(id)) {
-      setFilters((prevFilters) => {
-        const updatedFilters = prevFilters.filter((filter) => filter !== id)
-        return updatedFilters
-      })
-    } else {
-      setFilters((prevFilters) => [...prevFilters, id])
-    }
-  }
-
-  const sort = (option: SortOptions) => {
-    setSortBy(option)
-  }
 
   return (
     <>

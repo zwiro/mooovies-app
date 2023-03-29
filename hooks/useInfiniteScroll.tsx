@@ -11,7 +11,6 @@ function useInfiniteScroll(
 ) {
   const [allData, setAllData] = useState(initialState)
   const { query, filters, sortBy } = criteria
-  console.log(criteria)
 
   const ref = useRef(null)
   const isInView = useInView(ref)
@@ -30,7 +29,7 @@ function useInfiniteScroll(
 
   const { isLoading, isError, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: [apiUrl, filters, sortBy],
+      queryKey: [apiUrl, { filters }, { sortBy }],
       queryFn: ({ pageParam = 1 }) => fetchMoreData(pageParam),
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = allData.length < 20 ? undefined : allPages.length + 1
