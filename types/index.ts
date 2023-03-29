@@ -72,6 +72,13 @@ export interface GenresTypes {
   genres: Genre[]
 }
 
+export interface ProvidersType {
+  display_priority: number
+  logo_path: string
+  provider_id: number
+  provider_name: string
+}
+
 export enum SortOptions {
   popularityDesc = "popularity.desc",
   popularityAsc = "popularity.asc",

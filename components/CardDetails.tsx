@@ -1,4 +1,4 @@
-import { isMovies, isPeople, Movie, Person, Show } from "@/types"
+import { isMovies, isPeople, Movie, Person, ProvidersType, Show } from "@/types"
 import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import Image, { StaticImageData } from "next/image"
 import { useState, useEffect } from "react"
@@ -27,15 +27,23 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
     string | StaticImageData
   >(`https://image.tmdb.org/t/p/w500${image}`)
 
-  const fetchActors = async () => {
+  const fetchActorsAndProviders = async () => {
     if (isPeople(card)) return
     const type = isMovies(card) ? "movie" : "tv"
-    const actorsRes = await axios.get(`/api/actors?id=${card.id}&type=${type}`)
-    return actorsRes.data
+    const [actorsRes, providersRes] = await Promise.all([
+      axios.get(`/api/actors?id=${card.id}&type=${type}`),
+      axios.get(`/api/providers?id=${card.id}&type=${type}`),
+    ])
+    return { actors: actorsRes.data, providers: providersRes.data }
   }
 
-  const { isLoading, isError, data } = useQuery(["actors", card], fetchActors)
+  const { isLoading, isError, data } = useQuery(
+    ["actors", "providers", { id: card.id }],
+    fetchActorsAndProviders
+  )
 
+  const providers =
+    data?.providers.results.US?.flatrate || data?.providers.results.US?.buy
   const container = {
     hidden: { opacity: 0 },
     show: { opacity: 1 },
@@ -51,6 +59,8 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
     animate: "show",
     exit: "hidden",
   }
+
+  console.log(data?.providers.results.US)
 
   return (
     <motion.div
@@ -73,6 +83,22 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
             className="ml-auto h-8 w-8 cursor-pointer transition-all hover:rotate-90 hover:text-red-700"
           />
         </div>
+
+        {!isPeople(card) && providers && (
+          <div className="flex items-center gap-2">
+            <p className="text-xs">Available at</p>
+            {providers.map((provider: ProvidersType) => (
+              <Image
+                key={provider.provider_id}
+                src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                alt={`${provider.provider_name} logo`}
+                width={24}
+                height={24}
+                className="rounded-full"
+              />
+            ))}
+          </div>
+        )}
         <Image
           src={displayedPoster}
           onError={() => setDisplayedPoster(posterPlaceholder)}
@@ -107,7 +133,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                 )}
                 {isError && <div>Error while loading actors</div>}
                 {!isLoading &&
-                  data?.cast.slice(0, 5).map((actor: Person) => (
+                  data?.actors.cast.slice(0, 5).map((actor: Person) => (
                     <Link key={actor.id} href={`/person/${actor.id}`}>
                       <div className="rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
                         {actor.name}
