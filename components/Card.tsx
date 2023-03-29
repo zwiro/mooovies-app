@@ -7,6 +7,7 @@ interface CardProps {
   image: string
   title: string
   toggleCard: (cardId: number) => void
+  isCardSlider?: boolean
 }
 
 function Card({ id, image, title, toggleCard, isCardSlider }: CardProps) {

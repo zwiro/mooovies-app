@@ -9,7 +9,7 @@ function Navbar() {
   const isDesktopMenu = useMediaQuery("(min-width: 768px)")
 
   return (
-    <nav className="flex items-center gap-2 border-b border-zinc-800 px-4 py-2">
+    <nav className="flex items-center gap-2 border-b border-zinc-800 px-4 py-2 md:sticky md:top-0">
       <Link href="/">
         <Image src={logo} alt="Logo" />
       </Link>
