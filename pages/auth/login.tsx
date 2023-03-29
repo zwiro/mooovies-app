@@ -7,6 +7,7 @@ import { useRouter } from "next/router"
 
 function LoginPage() {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" })
+  const [error, setError] = useState(false)
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -15,7 +16,7 @@ function LoginPage() {
       await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password)
       router.push("/")
     } catch (error) {
-      console.log(error)
+      setError(true)
     }
   }
 
@@ -40,6 +41,7 @@ function LoginPage() {
           value={userInfo.email}
           onChange={({ target }) =>
             setUserInfo((prevInfo) => {
+              setError(false)
               return { ...userInfo, email: target.value }
             })
           }
@@ -58,6 +60,7 @@ function LoginPage() {
           value={userInfo.password}
           onChange={({ target }) =>
             setUserInfo((prevInfo) => {
+              setError(false)
               return { ...userInfo, password: target.value }
             })
           }
@@ -69,6 +72,7 @@ function LoginPage() {
       >
         Log In
       </button>
+      {error && <p>Incorrect credentials</p>}
     </form>
   )
 }
