@@ -1,6 +1,6 @@
-import useCard from "@/hooks/useCard"
-import { isMovies, isPeople, Movie, Person, Show } from "@/types"
 import { AnimatePresence } from "framer-motion"
+import { isMovies, isPeople, Movie, Person, Show } from "@/types"
+import useCard from "@/hooks/useCard"
 import Card from "./Card"
 import CardDetails from "./CardDetails"
 

@@ -1,15 +1,15 @@
+import { useState } from "react"
+import Image, { StaticImageData } from "next/image"
+import Link from "next/link"
+import { useQuery } from "react-query"
+import axios from "axios"
+import { motion } from "framer-motion"
 import { isMovies, isPeople, Movie, Person, ProvidersType, Show } from "@/types"
 import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid"
-import Image, { StaticImageData } from "next/image"
-import { useState, useEffect } from "react"
-import posterPlaceholder from "@/public/poster_placeholder.png"
 import { getGenreFromId } from "@/utils/getGenreFromId"
-import { motion } from "framer-motion"
-import Link from "next/link"
-import axios from "axios"
-import { useQuery } from "react-query"
-import LoadingSpinner from "./LoadingSpinner"
+import posterPlaceholder from "@/public/poster_placeholder.png"
 import useMediaQuery from "@/hooks/useMediaQuery"
+import LoadingSpinner from "./LoadingSpinner"
 
 interface CardDetailsProps {
   card: Movie | Show | Person
@@ -18,7 +18,9 @@ interface CardDetailsProps {
 
 function CardDetails({ card, toggleCard }: CardDetailsProps) {
   const isSmScreen = useMediaQuery("(min-width: 640px)")
+
   const [isTextExpanded, setIsTextExpanded] = useState(false)
+
   const title = isMovies(card) ? card.title : card.name
   const image = isPeople(card) ? card.profile_path : card.backdrop_path
   const release = isMovies(card)
@@ -161,6 +163,14 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                   </div>
                 </Link>
               ))}
+              <div className="flex w-full justify-end gap-2">
+                <button className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700">
+                  I have seen it
+                </button>
+                <button className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700">
+                  I want to see it
+                </button>
+              </div>
             </div>
           </>
         ) : (

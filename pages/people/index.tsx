@@ -1,12 +1,9 @@
 import axios from "axios"
+import Head from "next/head"
+import useInfiniteScroll from "@/hooks/useInfiniteScroll"
 import { FetchedDataPeople } from "@/types"
 import Results from "@/components/Results"
-import { useInfiniteQuery } from "react-query"
-import { useEffect, useRef, useState } from "react"
-import { useInView } from "framer-motion"
 import LoadingSpinner from "@/components/LoadingSpinner"
-import useInfiniteScroll from "@/hooks/useInfiniteScroll"
-import Head from "next/head"
 
 interface PeoplePageProps {
   people: FetchedDataPeople

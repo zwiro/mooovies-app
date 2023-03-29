@@ -1,11 +1,11 @@
 import axios from "axios"
-import { Movie, Person, SearchedData, Show } from "@/types"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
+import Head from "next/head"
+import useInfiniteScroll from "@/hooks/useInfiniteScroll"
+import { SearchedData } from "@/types"
 import Results from "@/components/Results"
 import LoadingSpinner from "@/components/LoadingSpinner"
-import useInfiniteScroll from "@/hooks/useInfiniteScroll"
-import Head from "next/head"
 
 interface SearchPageProps {
   searchResult: SearchedData
@@ -13,6 +13,7 @@ interface SearchPageProps {
 
 function SearchPage({ searchResult }: SearchPageProps) {
   const router = useRouter()
+
   const query = router.query.slug?.toString()
 
   const { isLoading, isError, allData, isFetchingNextPage, ref } =

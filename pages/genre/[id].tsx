@@ -1,18 +1,16 @@
-import axios from "axios"
-import { Movie, Show } from "@/types"
+import { useEffect, useRef, useState } from "react"
 import { GetServerSidePropsContext } from "next"
 import { useRouter } from "next/router"
+import Head from "next/head"
+import axios from "axios"
+import { useInfiniteQuery } from "react-query"
+import { useInView } from "framer-motion"
+import { Movie, Show } from "@/types"
 import { getGenreFromId } from "@/utils/getGenreFromId"
 import Results from "@/components/Results"
-import { useEffect, useRef, useState } from "react"
 import LoadingSpinner from "@/components/LoadingSpinner"
-import { useInView } from "framer-motion"
-import { useInfiniteQuery } from "react-query"
-import Filters from "@/components/Filters"
 import Sorting from "@/components/Sorting"
-import useFilter from "@/hooks/useFilter"
 import useSort from "@/hooks/useSort"
-import Head from "next/head"
 
 interface GenrePageProps {
   movies: { results: Movie[] }
@@ -21,6 +19,7 @@ interface GenrePageProps {
 
 function GenrePage({ movies, shows }: GenrePageProps) {
   const { sortBy, sort } = useSort()
+
   const router = useRouter()
 
   const id = router.query.id
@@ -32,6 +31,7 @@ function GenrePage({ movies, shows }: GenrePageProps) {
   )
 
   const ref = useRef(null)
+
   const isInView = useInView(ref)
 
   const fetchMoreData = async (page: number) => {

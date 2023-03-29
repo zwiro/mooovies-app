@@ -1,6 +1,6 @@
-import useMediaQuery from "@/hooks/useMediaQuery"
-import { ArrowLeftCircleIcon } from "@heroicons/react/24/solid"
 import { useRef } from "react"
+import { ArrowLeftCircleIcon } from "@heroicons/react/24/solid"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 interface ImageSliderProps {
   children: React.ReactNode
@@ -8,7 +8,9 @@ interface ImageSliderProps {
 
 function ImageSlider({ children }: ImageSliderProps) {
   const isLgScreen = useMediaQuery("(min-width: 1024px)")
+
   const sliderRef = useRef<HTMLDivElement>(null)
+
   return (
     <div className="relative">
       <div

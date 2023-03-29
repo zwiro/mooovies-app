@@ -1,11 +1,10 @@
-import Layout from "@/components/layout"
-import { usePageLoading } from "@/hooks/usePageLoading"
-import "@/styles/globals.css"
 import type { AppProps } from "next/app"
 import { Roboto } from "next/font/google"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/solid"
+import { usePageLoading } from "@/hooks/usePageLoading"
+import Layout from "@/components/layout"
 import LoadingSpinner from "@/components/LoadingSpinner"
+import "@/styles/globals.css"
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -16,6 +15,7 @@ const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isPageLoading } = usePageLoading()
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className={`${roboto.className} relative min-h-screen`}>

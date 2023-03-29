@@ -1,8 +1,7 @@
-import useExpand from "@/hooks/useExpand"
+import { motion, AnimatePresence } from "framer-motion"
 import { Genre, GenresTypes } from "@/types"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
-import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+import useExpand from "@/hooks/useExpand"
 
 interface FiltersProps {
   addFilter: (e: React.MouseEvent) => void

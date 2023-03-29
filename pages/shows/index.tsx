@@ -1,17 +1,13 @@
 import axios from "axios"
-import { FetchedDataShows, GenresTypes, SortOptions } from "@/types"
+import Head from "next/head"
+import { FetchedDataShows, GenresTypes } from "@/types"
+import useFilter from "@/hooks/useFilter"
+import useInfiniteScroll from "@/hooks/useInfiniteScroll"
+import useSort from "@/hooks/useSort"
 import Results from "@/components/Results"
-import { useEffect, useRef, useState } from "react"
 import Filters from "@/components/Filters"
-import { useInfiniteQuery } from "react-query"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import Sorting from "@/components/Sorting"
-import { useInView } from "framer-motion"
-import { ChevronDownIcon } from "@heroicons/react/24/solid"
-import useInfiniteScroll from "@/hooks/useInfiniteScroll"
-import useFilter from "@/hooks/useFilter"
-import useSort from "@/hooks/useSort"
-import Head from "next/head"
 
 interface ShowsPageProps {
   shows: FetchedDataShows
@@ -20,6 +16,7 @@ interface ShowsPageProps {
 
 function ShowsPage({ shows, genres }: ShowsPageProps) {
   const { filters, addFilter } = useFilter()
+
   const { sortBy, sort } = useSort()
 
   const { isLoading, isError, allData, isFetchingNextPage, ref } =

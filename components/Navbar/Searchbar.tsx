@@ -1,9 +1,10 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid"
-import { useRouter } from "next/router"
 import { useState } from "react"
+import { useRouter } from "next/router"
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid"
 
 function Searchbar() {
   const [searchInput, setSearchInput] = useState("")
+
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {

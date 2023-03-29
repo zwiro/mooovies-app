@@ -1,6 +1,6 @@
+import { useState } from "react"
 import Image, { StaticImageData } from "next/image"
 import posterPlaceholder from "@/public/poster_placeholder.png"
-import { useState } from "react"
 
 interface CardProps {
   id: number
@@ -14,6 +14,7 @@ function Card({ id, image, title, toggleCard, isCardSlider }: CardProps) {
   const [displayedPoster, setDisplayedPoster] = useState<
     string | StaticImageData
   >(`https://image.tmdb.org/t/p/w500${image}`)
+
   return (
     <div
       onClick={() => toggleCard(id)}

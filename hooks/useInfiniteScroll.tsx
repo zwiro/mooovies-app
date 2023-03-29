@@ -1,6 +1,6 @@
-import { useInView } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
+import { useInView } from "framer-motion"
 import { useInfiniteQuery } from "react-query"
 import { Movie, Person, Show } from "@/types"
 

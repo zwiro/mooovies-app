@@ -1,17 +1,13 @@
 import axios from "axios"
-import { FetchedDataMovies, GenresTypes, SortOptions } from "@/types"
-import Results from "@/components/Results"
-import { useEffect, useRef, useState } from "react"
-import Filters from "@/components/Filters"
-import { useInfiniteQuery } from "react-query"
-import LoadingSpinner from "@/components/LoadingSpinner"
-import Sorting from "@/components/Sorting"
-import { useInView } from "framer-motion"
-import { ChevronDownIcon } from "@heroicons/react/24/solid"
-import useInfiniteScroll from "@/hooks/useInfiniteScroll"
+import Head from "next/head"
+import { FetchedDataMovies, GenresTypes } from "@/types"
 import useFilter from "@/hooks/useFilter"
 import useSort from "@/hooks/useSort"
-import Head from "next/head"
+import Results from "@/components/Results"
+import Filters from "@/components/Filters"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import Sorting from "@/components/Sorting"
+import useInfiniteScroll from "@/hooks/useInfiniteScroll"
 
 interface MoviesPageProps {
   movies: FetchedDataMovies
@@ -20,6 +16,7 @@ interface MoviesPageProps {
 
 function MoviesPage({ movies, genres }: MoviesPageProps) {
   const { filters, addFilter } = useFilter()
+
   const { sortBy, sort } = useSort()
 
   const { isLoading, isError, allData, isFetchingNextPage, ref } =

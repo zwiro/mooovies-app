@@ -4,9 +4,6 @@ import {
   FetchedDataShows,
   isMovies,
   isPeople,
-  Movie,
-  Person,
-  Show,
 } from "@/types"
 import CardSlider from "../CardSlider"
 import Card from "../Card"

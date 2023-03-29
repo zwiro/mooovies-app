@@ -1,9 +1,9 @@
+import { useState } from "react"
+import { AnimatePresence } from "framer-motion"
 import { Bars3Icon } from "@heroicons/react/24/solid"
 import MobileMenu from "./MobileMenu"
 import NavLinks from "./NavLinks"
 import Searchbar from "./Searchbar"
-import { AnimatePresence } from "framer-motion"
-import { useState } from "react"
 
 function MobileNav() {
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false)
@@ -11,6 +11,7 @@ function MobileNav() {
   const toggleMobileMenu = () => {
     setIsMobileMenuVisible((prevVisible) => !prevVisible)
   }
+
   return (
     <>
       <Searchbar />

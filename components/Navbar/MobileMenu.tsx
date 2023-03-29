@@ -1,5 +1,5 @@
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import { motion } from "framer-motion"
+import { XMarkIcon } from "@heroicons/react/24/solid"
 
 interface MobileMenuProps {
   toggleMobileMenu: () => void

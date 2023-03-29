@@ -1,7 +1,7 @@
-import useExpand from "@/hooks/useExpand"
+import { motion, AnimatePresence } from "framer-motion"
 import { SortOptions } from "@/types"
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
-import { motion, AnimatePresence } from "framer-motion"
+import useExpand from "@/hooks/useExpand"
 
 const options = [
   {

@@ -1,6 +1,6 @@
-import useCard from "@/hooks/useCard"
-import { DataTypes } from "@/types"
 import { AnimatePresence } from "framer-motion"
+import { DataTypes } from "@/types"
+import useCard from "@/hooks/useCard"
 import CardDetails from "../CardDetails"
 import PopularSection from "./PopularSection"
 

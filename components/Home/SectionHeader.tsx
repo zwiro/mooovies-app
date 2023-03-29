@@ -6,7 +6,9 @@ interface SectionHeaderProps {
 
 function SectionHeader({ title }: SectionHeaderProps) {
   const [firstWord, secondWord] = title.split(" ")
+
   const href = secondWord.toLowerCase()
+
   return (
     <h2 className="pb-1 text-lg font-bold">
       {firstWord}{" "}
