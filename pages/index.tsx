@@ -16,7 +16,6 @@ export default function Home({ movies, shows, people }: DataTypes) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/icon.svg" />
       </Head>
-      <button onClick={() => signIn()}>Login</button>
       <PopularSectionContainer movies={movies} shows={shows} people={people} />
     </>
   )
