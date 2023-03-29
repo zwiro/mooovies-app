@@ -2,6 +2,7 @@ import PopularSectionContainer from "@/components/Home/PopularSectionContainer"
 import { DataTypes } from "@/types"
 import axios from "axios"
 import Head from "next/head"
+import { signIn } from "next-auth/react"
 
 export default function Home({ movies, shows, people }: DataTypes) {
   return (
@@ -15,6 +16,7 @@ export default function Home({ movies, shows, people }: DataTypes) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/icon.svg" />
       </Head>
+      <button onClick={() => signIn()}>Login</button>
       <PopularSectionContainer movies={movies} shows={shows} people={people} />
     </>
   )
