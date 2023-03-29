@@ -10,7 +10,7 @@ function SectionHeader({ title }: SectionHeaderProps) {
   const href = secondWord.toLowerCase()
 
   return (
-    <h2 className="pb-1 text-lg font-bold">
+    <h2 className="pb-1 text-lg font-bold lg:pb-4 lg:text-xl">
       {firstWord}{" "}
       <Link href={href}>
         <span className="text-red-700 hover:underline">{secondWord}</span>
