@@ -11,6 +11,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import useInfiniteScroll from "@/hooks/useInfiniteScroll"
 import useFilter from "@/hooks/useFilter"
 import useSort from "@/hooks/useSort"
+import Head from "next/head"
 
 interface ShowsPageProps {
   shows: FetchedDataShows
@@ -29,7 +30,10 @@ function ShowsPage({ shows, genres }: ShowsPageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center tracking-widest">
+      <Head>
+        <title>Mooovies | TV Shows</title>
+      </Head>
+      <p className="pb-4 text-center tracking-widest lg:text-2xl">
         <span>POPULAR</span>
         <span className="font-bold text-red-700"> SHOWS</span>:
       </p>

@@ -15,7 +15,7 @@ function ImageSlider({ children }: ImageSliderProps) {
       >
         <button
           onClick={() =>
-            sliderRef.current !== null && (sliderRef.current.scrollLeft -= 150)
+            sliderRef.current !== null && (sliderRef.current.scrollLeft -= 450)
           }
           className="absolute left-0 top-1/2 z-10 h-8 w-8 -translate-y-1/2 cursor-pointer"
         >
@@ -24,7 +24,7 @@ function ImageSlider({ children }: ImageSliderProps) {
         {children}
         <button
           onClick={() =>
-            sliderRef.current !== null && (sliderRef.current.scrollLeft += 150)
+            sliderRef.current !== null && (sliderRef.current.scrollLeft += 450)
           }
           className="absolute right-0 top-1/2 h-8 w-8 -translate-y-1/2 rotate-180 cursor-pointer"
         >

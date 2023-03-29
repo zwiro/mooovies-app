@@ -17,7 +17,7 @@ function Searchbar() {
         <input
           type="text"
           placeholder="Search for..."
-          className="rounded-full py-1 px-2"
+          className="w-full rounded-full py-1 px-2"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         />

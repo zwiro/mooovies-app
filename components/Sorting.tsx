@@ -49,7 +49,7 @@ function Sorting({ sort, sortBy }: SortingProps) {
   return (
     <div onClick={expand} className="relative">
       <div className="group flex cursor-pointer items-center gap-1">
-        <p className="group-hover:text-red-700">Sort</p>
+        <p className="group-hover:text-red-700 xl:text-xl">Sort</p>
         <ChevronDownIcon
           className={`h-5 w-5 transition-transform ${
             isExpanded && "rotate-180"
@@ -66,7 +66,7 @@ function Sorting({ sort, sortBy }: SortingProps) {
               <li
                 key={i}
                 onClick={() => sort(option.value)}
-                className={`flex cursor-pointer items-center justify-end gap-1 p-1 text-sm hover:text-red-700 ${
+                className={`flex cursor-pointer items-center justify-end gap-1 p-1 text-sm hover:text-red-700 xl:p-2 ${
                   sortBy === option.value && "text-red-700"
                 } `}
               >

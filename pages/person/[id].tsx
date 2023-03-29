@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios"
 import { Movie, Person, Show } from "@/types"
 import { GetServerSidePropsContext } from "next"
 import Results from "@/components/Results"
+import Head from "next/head"
 
 interface StarringPageProps {
   credits: { cast: (Movie | Show | Person)[] }
@@ -16,7 +17,10 @@ function StarringPage({ credits, person, error }: StarringPageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center tracking-widest">
+      <Head>
+        <title>Mooovies | {person.name}</title>
+      </Head>
+      <p className="pb-4 text-center tracking-widest lg:text-2xl">
         MOVIES AND SHOWS WITH{" "}
         <span className="font-bold uppercase text-red-700">{person.name}</span>:
       </p>

@@ -30,7 +30,9 @@ function Filters({ addFilter, filters, genres }: FiltersProps) {
         onClick={expand}
         className="group flex w-max cursor-pointer items-center gap-1"
       >
-        <p className="transition-colors group-hover:text-red-700">Filters</p>
+        <p className="transition-colors group-hover:text-red-700 xl:text-xl">
+          Filters
+        </p>
         <ChevronDownIcon
           className={`h-5 w-5 transition-transform ${
             isExpanded && "rotate-180"
@@ -48,7 +50,7 @@ function Filters({ addFilter, filters, genres }: FiltersProps) {
               <motion.button
                 whileTap={{ scale: 1.5 }}
                 key={genre.id}
-                className={`rounded border border-red-700 px-1 text-sm transition-colors hover:border-red-700 hover:bg-red-700 ${
+                className={`rounded border border-red-700 px-1 py-2 text-sm transition-colors hover:border-red-700 hover:bg-red-700 xl:px-4 ${
                   filters.includes(genre.id.toString()) && "bg-red-700"
                 }`}
                 data-id={genre.id}

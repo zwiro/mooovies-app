@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import Results from "@/components/Results"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import useInfiniteScroll from "@/hooks/useInfiniteScroll"
+import Head from "next/head"
 
 interface SearchPageProps {
   searchResult: SearchedData
@@ -19,7 +20,10 @@ function SearchPage({ searchResult }: SearchPageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center tracking-widest">
+      <Head>
+        <title>Mooovies | Search results for {query}</title>
+      </Head>
+      <p className="pb-4 text-center tracking-widest lg:text-2xl">
         SEARCH RESULTS FOR{" "}
         <span className="font-bold uppercase text-red-700">{query}</span>:
       </p>

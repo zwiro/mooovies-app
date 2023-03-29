@@ -12,6 +12,7 @@ import Filters from "@/components/Filters"
 import Sorting from "@/components/Sorting"
 import useFilter from "@/hooks/useFilter"
 import useSort from "@/hooks/useSort"
+import Head from "next/head"
 
 interface GenrePageProps {
   movies: { results: Movie[] }
@@ -66,7 +67,10 @@ function GenrePage({ movies, shows }: GenrePageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center tracking-widest">
+      <Head>
+        <title>Mooovies | {getGenreFromId(Number(router.query.id))}</title>
+      </Head>
+      <p className="pb-4 text-center tracking-widest lg:text-2xl">
         <span className="font-bold uppercase text-red-700">
           {getGenreFromId(Number(router.query.id))}{" "}
         </span>

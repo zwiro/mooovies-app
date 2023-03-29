@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <div className={`${roboto.className} relative min-h-screen`}>
         <Layout>
-          <main className="overflow-x-hidden px-2 py-4 pb-14">
+          <main className="overflow-x-hidden px-2 py-4 pb-14 md:px-12 lg:px-24 xl:px-48">
             {isPageLoading ? (
               <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
                 <LoadingSpinner />

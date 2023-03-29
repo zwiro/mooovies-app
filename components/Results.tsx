@@ -13,7 +13,7 @@ function Results({ data }: ResultsProps) {
 
   return (
     <>
-      <div className="grid grid-cols-fluid place-items-center gap-4">
+      <div className="grid grid-cols-fluid gap-4 lg:gap-8">
         {data.map((result) => (
           <Card
             key={result.id}

@@ -12,7 +12,7 @@ function NavLinks() {
     { name: "Register", href: "/register" },
   ]
   return (
-    <ul className="flex flex-col gap-4 px-8 pt-4 md:flex-row md:justify-center md:gap-2 md:pt-0">
+    <ul className="flex flex-col gap-4 px-8 pt-4 md:flex-grow md:flex-row md:justify-center md:gap-2 md:pt-0 lg:gap-12 xl:gap-24">
       {navLinks.map((navLink, i) => (
         <Link key={`navLink-${i}`} href={navLink.href}>
           <li
@@ -20,7 +20,7 @@ function NavLinks() {
               router.pathname === navLink.href
                 ? "translate-x-2 font-bold text-red-700 md:translate-x-0"
                 : "transition-transform hover:translate-x-2 md:transition-none md:hover:translate-x-0"
-            } hover:underline`}
+            } hover:underline xl:text-lg`}
           >
             {navLink.name}
           </li>

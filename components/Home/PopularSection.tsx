@@ -30,6 +30,7 @@ function PopularSection({ data, title, toggleCard }: PopularSectionProps) {
             image={isPeople(data) ? data.profile_path : data.backdrop_path}
             title={isMovies(data) ? data.title : data.name}
             toggleCard={toggleCard}
+            isCardSlider
           />
         ))}
       </CardSlider>

@@ -38,7 +38,7 @@ function useInfiniteScroll(
     })
 
   useEffect(() => {
-    fetchNextPage()
+    isInView && fetchNextPage()
   }, [isInView, fetchNextPage])
 
   return {

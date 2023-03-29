@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import { useInView } from "framer-motion"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import useInfiniteScroll from "@/hooks/useInfiniteScroll"
+import Head from "next/head"
 
 interface PeoplePageProps {
   people: FetchedDataPeople
@@ -17,7 +18,10 @@ function PeoplePage({ people }: PeoplePageProps) {
 
   return (
     <>
-      <p className="pb-4 text-center tracking-widest">
+      <Head>
+        <title>Mooovies | People</title>
+      </Head>
+      <p className="pb-4 text-center tracking-widest lg:text-2xl">
         POPULAR
         <span className="font-bold text-red-700"> PEOPLE</span>:
       </p>
