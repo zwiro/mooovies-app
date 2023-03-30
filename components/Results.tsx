@@ -23,6 +23,7 @@ function Results({ data }: ResultsProps) {
             }
             title={isMovies(result) ? result.title : result.name}
             toggleCard={toggleCard}
+            isPeople={isPeople(result)}
           />
         ))}
       </div>

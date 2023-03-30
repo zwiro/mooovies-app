@@ -8,6 +8,7 @@ import { isMovies, isPeople, Movie, Person, ProvidersType, Show } from "@/types"
 import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { getGenreFromId } from "@/utils/getGenreFromId"
 import posterPlaceholder from "@/public/poster_placeholder.png"
+import photoPlaceholder from "@/public/photo_placeholder.png"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import LoadingSpinner from "./LoadingSpinner"
 
@@ -107,10 +108,14 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           <div className="flex flex-1 justify-center">
             <Image
               src={displayedPoster}
-              onError={() => setDisplayedPoster(posterPlaceholder)}
+              onError={() =>
+                setDisplayedPoster(
+                  isPeople(card) ? photoPlaceholder : posterPlaceholder
+                )
+              }
               alt={`${title} poster`}
-              width={360}
-              height={isPeople(card) ? 540 : 200}
+              width={isPeople(card) ? 330 : 370}
+              height={isPeople(card) ? 500 : 210}
               className={`max-h-56 w-full rounded-xl object-cover ${
                 isPeople(card) && "max-h-96 w-auto sm:max-h-[500px] sm:w-auto"
               } `}
