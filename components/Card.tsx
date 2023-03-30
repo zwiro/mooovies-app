@@ -29,7 +29,7 @@ function Card({
       onClick={() => toggleCard(id)}
       className={`group relative cursor-pointer snap-center rounded-xl bg-gradient-to-b from-zinc-700/10 to-zinc-900/90 ${
         isCardSlider && "h-48 w-64"
-      } `}
+      } ${!isCardSlider && "my-auto h-fit w-fit"} `}
     >
       <Image
         src={displayedPoster}
@@ -39,7 +39,7 @@ function Card({
         alt={`${title} poster`}
         height={256}
         width={512}
-        className={`relative -z-10 rounded-xl object-cover transition-all group-hover:brightness-125 ${
+        className={`h-ft relative -z-10 rounded-xl object-cover transition-all group-hover:brightness-125 ${
           isCardSlider && "h-full w-full"
         } `}
       />

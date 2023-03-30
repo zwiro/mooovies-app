@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { auth, db } from "@/firebase/firebaseConfig"
+import { auth } from "@/firebase/firebaseConfig"
 import { useRouter } from "next/router"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import FormFields from "@/components/Auth/FormFields"
-import { doc, setDoc } from "firebase/firestore"
 
 function RegisterPage() {
   const router = useRouter()

@@ -14,11 +14,9 @@ import LoadingSpinner from "./LoadingSpinner"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, db } from "@/firebase/firebaseConfig"
 import {
-  addDoc,
   arrayRemove,
   arrayUnion,
   collection,
-  deleteDoc,
   doc,
   DocumentData,
   getDoc,
@@ -37,6 +35,7 @@ interface CardDetailsProps {
 function CardDetails({ card, toggleCard }: CardDetailsProps) {
   const [user, loading] = useAuthState(auth)
   const [userData, setUserData] = useState<DocumentData>()
+  const [disabled, setDisabled] = useState(false)
   const isSmScreen = useMediaQuery("(min-width: 640px)")
 
   const [isTextExpanded, setIsTextExpanded] = useState(false)
@@ -86,6 +85,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
 
   const addToSeen = async () => {
     if (!user) return
+    setDisabled(true)
     const docRef = doc(db, "users", user.uid)
     const docSnap = await getDoc(docRef)
     if (userData?.seen.includes(card.id)) {
@@ -102,10 +102,12 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         await updateDoc(docRef, { wantsToSee: arrayRemove(card.id) })
       }
     }
+    setDisabled(false)
   }
 
   const addToWantToSee = async () => {
     if (!user) return
+    setDisabled(true)
     const docRef = doc(db, "users", user.uid)
     const docSnap = await getDoc(docRef)
     if (userData?.wantsToSee.includes(card.id)) {
@@ -122,6 +124,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         await updateDoc(docRef, { seen: arrayRemove(card.id) })
       }
     }
+    setDisabled(false)
   }
 
   useEffect(() => {
@@ -243,20 +246,24 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
               {user && (
                 <div className="flex w-full justify-end gap-2">
                   <motion.button
+                    disabled={disabled}
                     whileTap={{ scale: 0.75 }}
                     onClick={addToSeen}
-                    disabled={userData?.seen.includes(card.id)}
-                    className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700 disabled:bg-red-700"
+                    className={`rounded border border-red-700 px-1 transition-colors hover:bg-red-700 ${
+                      userData?.seen.includes(card.id) && "bg-red-700"
+                    }`}
                   >
                     {!userData?.seen.includes(card.id)
                       ? "I have seen it"
                       : "You have seen it!"}
                   </motion.button>
                   <motion.button
+                    disabled={disabled}
                     whileTap={{ scale: 0.75 }}
                     onClick={addToWantToSee}
-                    disabled={userData?.wantsToSee.includes(card.id)}
-                    className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700 disabled:bg-red-700"
+                    className={`rounded border border-red-700 px-1 transition-colors hover:bg-red-700 ${
+                      userData?.wantsToSee.includes(card.id) && "bg-red-700"
+                    }`}
                   >
                     {!userData?.wantsToSee.includes(card.id)
                       ? "I want to see it"
