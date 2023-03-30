@@ -8,7 +8,8 @@ import {
 } from "firebase/auth"
 import { auth } from "@/firebase/firebaseConfig"
 import { useRouter } from "next/router"
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import { User } from "next-auth"
 
 //make reusable posibly with custom hook
 
@@ -23,7 +24,7 @@ function RegisterPage() {
     formState: { errors },
   } = useForm({ mode: "onBlur" })
 
-  const registerUser = async (data) => {
+  const registerUser: SubmitHandler<FieldValues> = async (data) => {
     const { email, password } = data
     try {
       await createUserWithEmailAndPassword(auth, email, password)
@@ -50,8 +51,8 @@ function RegisterPage() {
             type="text"
             id="email"
             placeholder="john@example.com"
-            className={`rounded border border-zinc-600 px-2 py-1 ${
-              errors.email && "border-red-700"
+            className={`rounded border px-2 py-1 ${
+              errors.email ? "border-red-700" : "border-zinc-600"
             } `}
             {...register("email", {
               required: true,
@@ -62,10 +63,12 @@ function RegisterPage() {
             })}
           />
         </div>
-        {errors.email && (
-          <span role="alert" className="pt-1 text-right text-xs">
-            {errors.email.message}
+        {errors.email ? (
+          <span role="alert" className="h-4 pt-1 text-right text-xs">
+            {errors.email.message?.toString()}
           </span>
+        ) : (
+          <div className="h-4" />
         )}
       </div>
       <div className="flex flex-col">
@@ -77,8 +80,8 @@ function RegisterPage() {
             type="password"
             id="password"
             placeholder="********"
-            className={`rounded border border-zinc-600 px-2 py-1 ${
-              errors.password && "border-red-700"
+            className={`rounded border px-2 py-1 outline-none ${
+              errors.password ? "border-red-700" : "border-zinc-600"
             } `}
             {...register("password", {
               required: true,
@@ -89,10 +92,12 @@ function RegisterPage() {
             })}
           />
         </div>
-        {errors.password && (
-          <span role="alert" className="pt-1 text-right text-xs">
-            {errors.password.message}
+        {errors.password ? (
+          <span role="alert" className="h-4 pt-1 text-right text-xs">
+            {errors.password.message?.toString()}
           </span>
+        ) : (
+          <div className="h-4" />
         )}
       </div>
       <button
