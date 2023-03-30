@@ -13,7 +13,6 @@ function NavLinks() {
     { name: "TV Shows", href: "/shows" },
     { name: "People", href: "/people" },
   ]
-  console.log(user)
   return (
     <ul className="flex flex-col gap-4 px-8 pt-4 md:flex-grow md:flex-row md:justify-center md:gap-2 md:pt-0 lg:gap-12 xl:gap-24">
       {navLinks.map((navLink, i) => (

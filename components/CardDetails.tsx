@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image, { StaticImageData } from "next/image"
 import Link from "next/link"
 import { useQuery } from "react-query"
@@ -11,6 +11,23 @@ import posterPlaceholder from "@/public/poster_placeholder.png"
 import photoPlaceholder from "@/public/photo_placeholder.png"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import LoadingSpinner from "./LoadingSpinner"
+import { useAuthState } from "react-firebase-hooks/auth"
+import { auth, db } from "@/firebase/firebaseConfig"
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  DocumentData,
+  getDoc,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore"
 
 interface CardDetailsProps {
   card: Movie | Show | Person
@@ -18,6 +35,8 @@ interface CardDetailsProps {
 }
 
 function CardDetails({ card, toggleCard }: CardDetailsProps) {
+  const [user, loading] = useAuthState(auth)
+  const [userData, setUserData] = useState<DocumentData>()
   const isSmScreen = useMediaQuery("(min-width: 640px)")
 
   const [isTextExpanded, setIsTextExpanded] = useState(false)
@@ -64,6 +83,59 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
     animate: "show",
     exit: "hidden",
   }
+
+  const addToSeen = async () => {
+    if (!user) return
+    const docRef = doc(db, "users", user.uid)
+    const docSnap = await getDoc(docRef)
+    if (userData?.seen.includes(card.id)) {
+      await updateDoc(docRef, { seen: arrayRemove(card.id) })
+    } else {
+      if (!docSnap.exists()) {
+        await setDoc(doc(db, "users", user.uid), {
+          userId: user.uid,
+          seen: [card.id],
+          wantsToSee: [],
+        })
+      } else {
+        await updateDoc(docRef, { seen: arrayUnion(card.id) })
+        await updateDoc(docRef, { wantsToSee: arrayRemove(card.id) })
+      }
+    }
+  }
+
+  const addToWantToSee = async () => {
+    if (!user) return
+    const docRef = doc(db, "users", user.uid)
+    const docSnap = await getDoc(docRef)
+    if (userData?.wantsToSee.includes(card.id)) {
+      await updateDoc(docRef, { wantsToSee: arrayRemove(card.id) })
+    } else {
+      if (!docSnap.exists()) {
+        await setDoc(doc(db, "users", user.uid), {
+          userId: user.uid,
+          seen: [],
+          wantsToSee: [card.id],
+        })
+      } else {
+        await updateDoc(docRef, { wantsToSee: arrayUnion(card.id) })
+        await updateDoc(docRef, { seen: arrayRemove(card.id) })
+      }
+    }
+  }
+
+  useEffect(() => {
+    const getUser = async () => {
+      if (!user || loading) return
+      const collectionRef = collection(db, "users")
+      const q = query(collectionRef, where("userId", "==", user.uid))
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        setUserData(snapshot.docs[0]?.data())
+      })
+      return unsubscribe
+    }
+    getUser()
+  }, [user, loading])
 
   return (
     <motion.div
@@ -168,14 +240,30 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                   </div>
                 </Link>
               ))}
-              <div className="flex w-full justify-end gap-2">
-                <button className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700">
-                  I have seen it
-                </button>
-                <button className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700">
-                  I want to see it
-                </button>
-              </div>
+              {user && (
+                <div className="flex w-full justify-end gap-2">
+                  <motion.button
+                    whileTap={{ scale: 0.75 }}
+                    onClick={addToSeen}
+                    disabled={userData?.seen.includes(card.id)}
+                    className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700 disabled:bg-red-700"
+                  >
+                    {!userData?.seen.includes(card.id)
+                      ? "I have seen it"
+                      : "You have seen it!"}
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.75 }}
+                    onClick={addToWantToSee}
+                    disabled={userData?.wantsToSee.includes(card.id)}
+                    className="rounded border border-red-700 px-1 transition-colors hover:bg-red-700 disabled:bg-red-700"
+                  >
+                    {!userData?.wantsToSee.includes(card.id)
+                      ? "I want to see it"
+                      : "You want to see it"}
+                  </motion.button>
+                </div>
+              )}
             </div>
           </>
         ) : (
