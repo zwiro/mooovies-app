@@ -156,7 +156,7 @@ function CardDetails({ card, toggleCard, isProfile }: CardDetailsProps) {
       <motion.div
         variants={item}
         onClick={(e) => e.stopPropagation()}
-        className={`m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4 lg:p-8 xl:w-2/3 2xl:w-1/2  ${
+        className={`m-2 flex max-h-screen flex-col gap-4 rounded-xl bg-black/80 p-4 lg:p-8 xl:w-2/3 2xl:w-1/2  ${
           isPeople(card) && "sm:w-max md:w-max lg:w-max xl:w-max 2xl:w-max"
         } `}
       >
