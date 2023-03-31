@@ -1,11 +1,17 @@
-import Results from "@/components/Results"
-import { auth, db } from "@/firebase/firebaseConfig"
-import { doc, getDoc } from "firebase/firestore"
-import Head from "next/head"
-import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import Head from "next/head"
+import {
+  collection,
+  DocumentData,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore"
+import { auth, db } from "@/firebase/firebaseConfig"
 import { useAuthState } from "react-firebase-hooks/auth"
-import { useQuery } from "react-query"
+import Results from "@/components/Results"
+import useCard from "@/hooks/useCard"
 
 function ProfilePage() {
   const [user, loading] = useAuthState(auth)
@@ -21,14 +27,15 @@ function ProfilePage() {
     if (!loading && !user) router.push("/")
     const getData = async () => {
       if (!user) return
-      const docRef = doc(db, "users", user.uid)
-      const docSnap = await getDoc(docRef)
-      if (docSnap.exists()) {
-        setUserData(docSnap.data())
-      }
+      const collectionRef = collection(db, "users")
+      const q = query(collectionRef, where("userId", "==", user.uid))
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        setUserData(snapshot.docs[0]?.data())
+      })
+      return unsubscribe
     }
     getData()
-  }, [router, user])
+  }, [router, user, loading])
 
   return (
     <>
@@ -46,7 +53,7 @@ function ProfilePage() {
           Seen movies and shows:
         </p>
         {userData.seen.length ? (
-          <Results data={userData.seen} />
+          <Results data={userData.seen} isProfile />
         ) : (
           <p className="text-center">No movies or shows marked as seen</p>
         )}
@@ -56,7 +63,7 @@ function ProfilePage() {
           Movies and shows you want to see:
         </p>
         {userData.wantsToSee.length ? (
-          <Results data={userData.wantsToSee} />
+          <Results data={userData.wantsToSee} isProfile />
         ) : (
           <p className="text-center">
             No movies or shows marked as wanted to see

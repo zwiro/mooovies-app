@@ -97,9 +97,9 @@ export enum PageTypes {
 }
 
 export function isPeople(data: Person | Movie | Show): data is Person {
-  return "profile_path" in data
+  return typeof data === "object" && "profile_path" in data
 }
 
 export function isMovies(data: Person | Movie | Show): data is Movie {
-  return "title" in data
+  return typeof data === "object" && "title" in data
 }

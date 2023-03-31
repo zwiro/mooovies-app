@@ -6,9 +6,10 @@ import CardDetails from "./CardDetails"
 
 interface ResultsProps {
   data: (Movie | Show | Person)[]
+  isProfile?: boolean
 }
 
-function Results({ data }: ResultsProps) {
+function Results({ data, isProfile }: ResultsProps) {
   const { openedCardId, toggleCard } = useCard()
 
   return (
@@ -36,6 +37,7 @@ function Results({ data }: ResultsProps) {
               )!
             }
             toggleCard={toggleCard}
+            isProfile={isProfile}
           />
         )}
       </AnimatePresence>

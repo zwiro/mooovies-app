@@ -30,9 +30,10 @@ import {
 interface CardDetailsProps {
   card: Movie | Show | Person
   toggleCard: (id: number | null) => void
+  isProfile?: boolean
 }
 
-function CardDetails({ card, toggleCard }: CardDetailsProps) {
+function CardDetails({ card, toggleCard, isProfile }: CardDetailsProps) {
   const [user, loading] = useAuthState(auth)
   const [userData, setUserData] = useState<DocumentData>({
     userId: "",
@@ -43,11 +44,11 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
 
   const [isTextExpanded, setIsTextExpanded] = useState(false)
 
-  const title = isMovies(card) ? card.title : card.name
-  const image = isPeople(card) ? card.profile_path : card.backdrop_path
+  const title = isMovies(card) ? card?.title : card?.name
+  const image = isPeople(card) ? card?.profile_path : card?.backdrop_path
   const release = isMovies(card)
-    ? card.release_date
-    : !isPeople(card) && card.first_air_date
+    ? card?.release_date
+    : !isPeople(card) && card?.first_air_date
 
   const [displayedPoster, setDisplayedPoster] = useState<
     string | StaticImageData
@@ -64,7 +65,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
   }
 
   const { isLoading, isError, data } = useQuery(
-    ["actors", "providers", { id: card.id }],
+    ["actors", "providers", { id: card?.id }],
     fetchActorsAndProviders
   )
 
@@ -90,7 +91,9 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
     if (!user) return
     const docRef = doc(db, "users", user.uid)
     const docSnap = await getDoc(docRef)
-    if (userData?.seen?.includes(card)) {
+    if (
+      userData.seen.find((item: Movie | Show | Person) => item.id === card?.id)
+    ) {
       await updateDoc(docRef, { seen: arrayRemove(card) })
     } else {
       if (!docSnap.exists()) {
@@ -103,13 +106,18 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         await updateDoc(docRef, { wantsToSee: arrayRemove(card) })
       }
     }
+    isProfile && toggleCard(null)
   }
 
   const addToWantToSee = async () => {
     if (!user) return
     const docRef = doc(db, "users", user.uid)
     const docSnap = await getDoc(docRef)
-    if (userData?.wantsToSee?.includes(card)) {
+    if (
+      userData.wantsToSee.find(
+        (item: Movie | Show | Person) => item.id === card?.id
+      )
+    ) {
       await updateDoc(docRef, { wantsToSee: arrayRemove(card) })
     } else {
       if (!docSnap.exists()) {
@@ -122,6 +130,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
         await updateDoc(docRef, { seen: arrayRemove(card) })
       }
     }
+    isProfile && toggleCard(null)
   }
 
   useEffect(() => {
@@ -201,7 +210,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                 (isTextExpanded ? "line-clamp-none" : "line-clamp-6")
               }`}
             >
-              {card.overview}
+              {card?.overview}
             </p>
           )}
         </div>
@@ -211,7 +220,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
               <span className="text-sm">Released {release}</span>
               <div className="flex items-center gap-1">
                 <StarIcon className="h-4 w-4 text-red-700" />
-                <span>{card.vote_average.toFixed(1)}</span>
+                <span>{card?.vote_average.toFixed(1)}</span>
               </div>
             </div>
             <div>
@@ -233,7 +242,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
               </div>
             </div>
             <div className="flex flex-wrap gap-2">
-              {card.genre_ids.map((id) => (
+              {card?.genre_ids.map((id) => (
                 <Link key={id} href={`/genre/${id}`}>
                   <div className="rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
                     {getGenreFromId(id)}
@@ -249,7 +258,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                       id="seen"
                       checked={Boolean(
                         userData.seen.find(
-                          (item: Movie | Show | Person) => item.id === card.id
+                          (item: Movie | Show | Person) => item.id === card?.id
                         )
                       )}
                       onChange={addToSeen}
@@ -257,11 +266,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                         userData?.seen?.includes(card) && "bg-red-700"
                       }`}
                     />
-                    <label htmlFor="seen">
-                      {!userData?.seen?.includes(card)
-                        ? "I have seen it"
-                        : "You have seen it!"}
-                    </label>
+                    <label htmlFor="seen">I have seen it</label>
                   </div>
                   <div className="flex items-center gap-1">
                     <input
@@ -270,7 +275,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                       id="wants-to-see"
                       checked={Boolean(
                         userData.wantsToSee.find(
-                          (item: Movie | Show | Person) => item.id === card.id
+                          (item: Movie | Show | Person) => item.id === card?.id
                         )
                       )}
                       onChange={addToWantToSee}
@@ -278,11 +283,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                         userData?.wantsToSee?.includes(card) && "bg-red-700"
                       }`}
                     />
-                    <label htmlFor="wants-to-see">
-                      {!userData?.wantsToSee?.includes(card)
-                        ? "I want to see it"
-                        : "You want to see it"}
-                    </label>
+                    <label htmlFor="wants-to-see">I want to see it</label>
                   </div>
                 </div>
               )}
@@ -294,16 +295,16 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
               <div className="flex">
                 <span>Known for:</span>
                 <span className="ml-auto rounded bg-red-700 px-1 text-base">
-                  {card.known_for_department}
+                  {card?.known_for_department}
                 </span>
               </div>
               <div>
-                {card.known_for.map((item) => (
+                {card?.known_for.map((item) => (
                   <div key={item.id} className="font-bold">
                     {isMovies(item) ? item.title : item.name}
                   </div>
                 ))}
-                <Link href={`/person/${card.id}`}>
+                <Link href={`/person/${card?.id}`}>
                   <button className="my-1 rounded border border-transparent bg-red-700 px-1 transition-colors hover:border-red-700 hover:bg-transparent">
                     See more
                   </button>
