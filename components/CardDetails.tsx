@@ -34,8 +34,11 @@ interface CardDetailsProps {
 
 function CardDetails({ card, toggleCard }: CardDetailsProps) {
   const [user, loading] = useAuthState(auth)
-  const [userData, setUserData] = useState<DocumentData>()
-  const [disabled, setDisabled] = useState(false)
+  const [userData, setUserData] = useState<DocumentData>({
+    userId: "",
+    seen: [],
+    wantsToSee: [],
+  })
   const isSmScreen = useMediaQuery("(min-width: 640px)")
 
   const [isTextExpanded, setIsTextExpanded] = useState(false)
@@ -85,46 +88,40 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
 
   const addToSeen = async () => {
     if (!user) return
-    setDisabled(true)
     const docRef = doc(db, "users", user.uid)
     const docSnap = await getDoc(docRef)
-    if (userData?.seen.includes(card.id)) {
-      await updateDoc(docRef, { seen: arrayRemove(card.id) })
+    if (userData?.seen?.includes(card)) {
+      await updateDoc(docRef, { seen: arrayRemove(card) })
     } else {
       if (!docSnap.exists()) {
         await setDoc(doc(db, "users", user.uid), {
           userId: user.uid,
-          seen: [card.id],
-          wantsToSee: [],
+          seen: [card],
         })
       } else {
-        await updateDoc(docRef, { seen: arrayUnion(card.id) })
-        await updateDoc(docRef, { wantsToSee: arrayRemove(card.id) })
+        await updateDoc(docRef, { seen: arrayUnion(card) })
+        await updateDoc(docRef, { wantsToSee: arrayRemove(card) })
       }
     }
-    setDisabled(false)
   }
 
   const addToWantToSee = async () => {
     if (!user) return
-    setDisabled(true)
     const docRef = doc(db, "users", user.uid)
     const docSnap = await getDoc(docRef)
-    if (userData?.wantsToSee.includes(card.id)) {
-      await updateDoc(docRef, { wantsToSee: arrayRemove(card.id) })
+    if (userData?.wantsToSee?.includes(card)) {
+      await updateDoc(docRef, { wantsToSee: arrayRemove(card) })
     } else {
       if (!docSnap.exists()) {
         await setDoc(doc(db, "users", user.uid), {
           userId: user.uid,
-          seen: [],
-          wantsToSee: [card.id],
+          wantsToSee: [card],
         })
       } else {
-        await updateDoc(docRef, { wantsToSee: arrayUnion(card.id) })
-        await updateDoc(docRef, { seen: arrayRemove(card.id) })
+        await updateDoc(docRef, { wantsToSee: arrayUnion(card) })
+        await updateDoc(docRef, { seen: arrayRemove(card) })
       }
     }
-    setDisabled(false)
   }
 
   useEffect(() => {
@@ -199,7 +196,7 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
           {!isPeople(card) && (
             <p
               onClick={() => setIsTextExpanded((prevExpanded) => !prevExpanded)}
-              className={`white flex-1 cursor-pointer text-sm sm:text-base ${
+              className={`white flex-1 cursor-pointer pt-4 text-sm sm:text-base ${
                 !isSmScreen &&
                 (isTextExpanded ? "line-clamp-none" : "line-clamp-6")
               }`}
@@ -244,31 +241,49 @@ function CardDetails({ card, toggleCard }: CardDetailsProps) {
                 </Link>
               ))}
               {user && (
-                <div className="flex w-full justify-end gap-2">
-                  <motion.button
-                    disabled={disabled}
-                    whileTap={{ scale: 0.75 }}
-                    onClick={addToSeen}
-                    className={`rounded border border-red-700 px-1 transition-colors hover:bg-red-700 ${
-                      userData?.seen.includes(card.id) && "bg-red-700"
-                    }`}
-                  >
-                    {!userData?.seen.includes(card.id)
-                      ? "I have seen it"
-                      : "You have seen it!"}
-                  </motion.button>
-                  <motion.button
-                    disabled={disabled}
-                    whileTap={{ scale: 0.75 }}
-                    onClick={addToWantToSee}
-                    className={`rounded border border-red-700 px-1 transition-colors hover:bg-red-700 ${
-                      userData?.wantsToSee.includes(card.id) && "bg-red-700"
-                    }`}
-                  >
-                    {!userData?.wantsToSee.includes(card.id)
-                      ? "I want to see it"
-                      : "You want to see it"}
-                  </motion.button>
+                <div className="flex w-full flex-col items-end">
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      name="seen"
+                      id="seen"
+                      checked={Boolean(
+                        userData.seen.find(
+                          (item: Movie | Show | Person) => item.id === card.id
+                        )
+                      )}
+                      onChange={addToSeen}
+                      className={`rounded border border-red-700 px-1 accent-red-700 transition-colors hover:bg-red-700 ${
+                        userData?.seen?.includes(card) && "bg-red-700"
+                      }`}
+                    />
+                    <label htmlFor="seen">
+                      {!userData?.seen?.includes(card)
+                        ? "I have seen it"
+                        : "You have seen it!"}
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      name="wants-to-see"
+                      id="wants-to-see"
+                      checked={Boolean(
+                        userData.wantsToSee.find(
+                          (item: Movie | Show | Person) => item.id === card.id
+                        )
+                      )}
+                      onChange={addToWantToSee}
+                      className={`rounded border border-red-700 px-1 accent-red-700 transition-colors hover:bg-red-700 ${
+                        userData?.wantsToSee?.includes(card) && "bg-red-700"
+                      }`}
+                    />
+                    <label htmlFor="wants-to-see">
+                      {!userData?.wantsToSee?.includes(card)
+                        ? "I want to see it"
+                        : "You want to see it"}
+                    </label>
+                  </div>
                 </div>
               )}
             </div>

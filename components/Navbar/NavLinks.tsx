@@ -52,12 +52,14 @@ function NavLinks() {
         <>
           <li
             className={`${
-              router.pathname === ""
+              router.pathname === `/profile/[id]`
                 ? "translate-x-2 font-bold text-red-700 md:translate-x-0"
                 : "transition-transform hover:translate-x-2 md:transition-none md:hover:translate-x-0"
             } hover:underline xl:text-lg`}
           >
-            <Link href="/">{user.email?.split("@")[0]}</Link>
+            <Link href={`/profile/${user.uid}`}>
+              {user.email?.split("@")[0]}
+            </Link>
           </li>
           <li>
             <button
