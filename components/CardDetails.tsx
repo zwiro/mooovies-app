@@ -151,12 +151,12 @@ function CardDetails({ card, toggleCard, isProfile }: CardDetailsProps) {
       variants={container}
       {...animation}
       onClick={() => toggleCard(null)}
-      className="fixed top-0 left-0 z-20 grid h-screen w-screen place-items-center bg-black/20 p-4 backdrop-blur"
+      className="fixed top-0 left-0 z-20 grid h-screen w-screen place-items-center overflow-scroll bg-black/20 p-4 backdrop-blur"
     >
       <motion.div
         variants={item}
         onClick={(e) => e.stopPropagation()}
-        className={`m-2 flex max-h-screen flex-col gap-4 rounded-xl bg-black/80 p-4 lg:p-8 xl:w-2/3 2xl:w-1/2  ${
+        className={`m-2 flex flex-col gap-4 rounded-xl bg-black/80 p-4 lg:p-8 xl:w-2/3 2xl:w-1/2  ${
           isPeople(card) && "sm:w-max md:w-max lg:w-max xl:w-max 2xl:w-max"
         } `}
       >
@@ -198,7 +198,7 @@ function CardDetails({ card, toggleCard, isProfile }: CardDetailsProps) {
               width={isPeople(card) ? 330 : 370}
               height={isPeople(card) ? 500 : 210}
               className={`max-h-56 w-full rounded-xl object-cover ${
-                isPeople(card) && "h-[500px] max-h-none w-auto"
+                isPeople(card) && "h-[400px] max-h-none w-auto"
               } `}
             />
           </div>
