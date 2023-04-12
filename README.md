@@ -1,3 +1,48 @@
+# Mooovies
+
+This is my moovies app.
+ 
+
+## Technologies used
+
+* React
+* TypeScript
+* Tailwind
+* Next.js
+* TanStack Query
+* Firebase
+* React-Hook-Form
+* Framer-Motion
+
+
+## Demo
+
+[Live Site](https://mooovies-mu.vercel.app/)
+
+
+## Features
+
+* User authentication
+* Adding movies and shows to watched / want to watch sections on user profile
+* Categorization by movies, TV shows and people
+* Displaying currently popular movies, TV shows and people
+* Searching by keyword
+* Displaying movies and TV shows by actor or genre
+* Filtering results by genres
+* Sorting results by popularity, revenue and more
+* Displaying list of providers, where movie or TV show is available
+* Inifite scrolling results
+
+
+
+## Screenshots
+
+![App Screenshot](https://i.ibb.co/NFQ2F3H/Screenshot-2023-04-12-at-21-37-00-Mooovies-zwiro.png)
+![App Screenshot](https://i.ibb.co/94QBFzm/Screenshot-2023-04-12-at-21-36-29-Mooovies.png)
+![App Screenshot](https://i.ibb.co/sVKBgZL/Screenshot-2023-04-12-at-21-36-13-Mooovies-TV-Shows.png)
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
